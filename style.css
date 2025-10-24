@@ -377,111 +377,6 @@ label{display:block;margin-bottom:12px;color:var(--dark);font-weight:600}
   }
 }
 
-/* =============================================
-   LUNGS SECTION — PREMIUM PROFESSIONAL DESIGN
-   ============================================= */
-
-/* #lungsSection {
-  background: linear-gradient(145deg, #f7fcff, #e6f7ff);
-  border-top: 3px solid rgba(0, 180, 255, 0.4);
-  box-shadow: 0 10px 30px rgba(0, 140, 200, 0.08);
-  border-radius: 18px;
-  padding: 70px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 70px 0;
-} */
-
-/* Heading */
-/* #lungsSection h3 {
-  color: #0077b6;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 40px;
-  text-align: center;
-  letter-spacing: 0.5px;
-} */
-
-/* Image Row */
-/* #lungsSection .image-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  margin-bottom: 25px;
-}
-
-#lungsSection .image-row img {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 15px;
-  border: 2px solid rgba(0, 140, 200, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-#lungsSection .image-row img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 150, 255, 0.15);
-} */
-
-/* Info Card */
-/* #lungsSection .mini-card {
-  background: #ffffff;
-  border: 1px solid rgba(0, 150, 255, 0.15);
-  border-left: 5px solid #00aaff;
-  border-radius: 14px;
-  padding: 35px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-  max-width: 900px;
-  text-align: center;
-}
-
-#lungsSection .mini-card h4 {
-  color: #0288d1;
-  font-size: 1.3rem;
-  margin-top: 15px;
-  margin-bottom: 10px;
-}
-
-#lungsSection .mini-card p {
-  color: #444;
-  font-size: 0.96rem;
-  line-height: 1.6;
-} */
-
-/* Button */
-/* #lungsSection .btn-primary {
-  margin-top: 30px;
-  padding: 12px 30px;
-  background: linear-gradient(90deg, #00b4d8, #0077b6);
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 180, 255, 0.25);
-  transition: all 0.3s ease;
-}
-
-#lungsSection .btn-primary:hover {
-  background: linear-gradient(90deg, #0077b6, #005f8c);
-  transform: translateY(-2px);
-} */
-
-/* Responsive */
-/* @media (max-width: 768px) {
-  #lungsSection h3 {
-    font-size: 1.6rem;
-  }
-  #lungsSection .image-row img {
-    width: 130px;
-    height: 130px;
-  }
-} */
 
 /* ===== NAVBAR & HAMBURGER ===== */
 header {
@@ -611,3 +506,56 @@ header {
   }
 }
 
+.scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 25px;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .scroll-top.show {
+      display: block;
+    }
+
+
+
+    @media (max-width: 600px) {
+  .hero {
+    padding: 60px 15px; /* reduce top-bottom padding */
+  }
+  .hero-left h1 {
+    font-size: 2rem; /* smaller heading */
+  }
+  .lead {
+    font-size: 1.1rem; /* smaller lead text */
+  }
+  .hero-right {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+  }
+  .hero-illustration {
+    max-width: 100%;
+    margin-right: 0;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .cards-row, .cards2-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .mini-card, .minii-card {
+    width: 100%; /* full width cards */
+  }
+}

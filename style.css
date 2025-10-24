@@ -35,6 +35,18 @@ body{margin:0;color:var(--dark);background:#ffffff;line-height:1.5}
 
 .hero-illustration{max-width:300px;opacity:0.95;margin-right: 65px;}
 
+/* ====== SHOW IMAGE ONLY ON LAPTOP/DESKTOP ====== */
+.desktop-only {
+  display: block; /* by default visible */
+}
+
+/* Hide image on phones and small screens */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
+
 .calculator{display:flex;gap:28px;padding:100px 0}
 .card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:0 6px 20px rgba(15,23,32,0.04);flex:1}
 .calc-left{max-width:520px}
@@ -559,3 +571,4 @@ header {
     width: 100%; /* full width cards */
   }
 }
+

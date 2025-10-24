@@ -1,0 +1,613 @@
+:root{
+  --green:#2fa65a;
+  --dark:#0f1720;
+  --muted:#6b7280;
+  --card:#fbfbfb;
+  --radius:12px;
+  --container-width:1100px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--dark);background:#ffffff;line-height:1.5}
+.container{max-width:var(--container-width);margin:0 auto;padding:28px}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+.site-header{border-bottom:1px solid #eef0f2;background:#fff;position:sticky;top:0;z-index:50}
+.brand{font-weight:700;font-size:1.25rem;color:var(--dark)}
+.main-nav a{margin-left:18px;color:var(--muted);text-decoration:none}
+.main-nav a:hover{color:var(--dark)}
+
+.hero{display:flex;align-items:center;justify-content:space-between;padding:120px 0}
+.hero-left{max-width:60%}
+.hero-left h1{font-size:3.3rem;margin:0 0 8px;}
+.lead{color:var(--muted);margin-bottom:35px;margin-top: 5px;font-size: 27px;}
+.btn-primary{background:var(--green);color:#fff;border:none;padding:14px 62px;border-radius:10px;font-weight:500;cursor:pointer}
+.btn-primary{font-size:1.5rem;margin:0 0 2px}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+.btn-primary {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+.btn-ghost{background:transparent;border:1px solid #e6e6e6;padding:10px 16px;border-radius:10px;cursor:pointer}
+
+.hero-illustration{max-width:300px;opacity:0.95;margin-right: 65px;}
+
+.calculator{display:flex;gap:28px;padding:100px 0}
+.card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:0 6px 20px rgba(15,23,32,0.04);flex:1}
+.calc-left{max-width:520px}
+.calc-left h2{margin-top:0}
+label{display:block;margin-bottom:12px;color:var(--dark);font-weight:600}
+.inline-inputs{display:flex;gap:10px;align-items:center;margin-top:6px}
+.inline-inputs input{flex:1;padding:12px;border-radius:8px;border:1px solid #e6e6e6}
+.unit{padding:12px;border-radius:8px;border:1px solid #e6e6e6}
+.actions{margin-top:16px;display:flex;gap:12px}
+
+.result-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.gauge {
+  width: 200px;
+  height: 100px;
+  border-radius: 100px 100px 0 0;
+  background: linear-gradient(90deg, #ffd36a, #26c26a, #ff6b57);
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+/* Inner white mask to make it look like a semi-circle meter */
+.gauge::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 160px;
+  height: 90px;
+  background: #f9fafc;
+  border-radius: 90px 90px 0 0;
+  z-index: 1; /* 👈 lowered so needle stays visible */
+}
+
+/* The rotating needle */
+.needle {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 0;
+  height: 60px;
+  background: none;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(0deg);
+  z-index: 3;
+  transition: transform 0.5s ease;
+}
+
+/* create the needle shape using a pseudo-element */
+.needle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 12px;         /* bottom width (thick base) */
+  height: 60px;
+  background: linear-gradient(to top, #444, #d22); /* dark-to-red tone */
+  clip-path: polygon(50% 0%, 100% 90%, 60% 100%, 40% 100%, 0% 90%); 
+  /* polygon makes the needle gradually narrow and pointy at top */
+  border-radius: 6px 6px 0 0; /* slightly rounded base */
+}
+.result-text{padding:8px 0}
+.bmi-value{font-size:1.6rem;font-weight:700}
+.bmi-category{color:var(--muted);margin-top:6px}
+
+.preview-cards{padding-top:10px}
+.cards-row{display:flex;gap:16px;margin-top:18px}
+.mini-card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 16px rgba(15,23,32,0.04);flex:1}
+.cards2-row{display:flex;gap:16px;margin-top:18px}
+.minii-card{background:#edfcff;padding:16px;border-radius:10px;box-shadow:0 6px 16px rgba(15,23,32,0.04);flex:1}
+.mini-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mini-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+/* .mini-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+} */
+.minii-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.minii-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.about {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: left;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-footer {
+  background: #fff;
+  border-radius: 12px;
+  margin-top: 10px;
+  padding: 30px;
+  text-align: left;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* .site-footer{display:flex;justify-content:space-between;align-items: center;padding:18px 0;border-top:1px solid #f1f4f6} */
+
+@media (max-width:900px){
+  .hero{flex-direction:column;align-items:flex-start}
+  .calculator{flex-direction:column}
+  .hero-left{max-width:100%}
+  .hero-illustration{max-width:180px}
+}
+
+.quick-img {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quick-img:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Image inside card */
+.quick-img .quick-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  transition: transform 0.4s ease;
+}
+
+/* Small zoom effect on hover */
+.quick-img:hover .quick-img {
+  transform: scale(1.08);
+}
+
+/* .diet { background: #fefbf4; }
+.exercise { background: #f4fbf8; }
+.lifestyle { background: #f6f7fd; }
+
+.quick-card .quick-img {
+  border-radius: 50%;                     
+  background: #f8f9fa;
+  padding: 8px;
+} */
+
+.quick-img{max-width:300px;opacity:0.95;align-items: center;}
+
+/* Heart & Yoga sections */
+/* #heartSection .mini-card, #yogaSection .mini-card {
+  background: #fff;
+  padding: 22px;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 16px rgba(15,23,32,0.04);
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#heartSection .mini-card:hover, #yogaSection .mini-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+#heartSection h4, #yogaSection h4 { color: var(--green); margin-top: 10px; }
+#heartSection p, #yogaSection p { font-size: 0.95rem; color: var(--muted); margin-bottom: 8px; }
+#heartSection button, #yogaSection button {
+  margin-top: 10px;
+  font-size: 1rem;
+} */
+
+
+/* =======================================
+   HEART & YOGA SECTIONS (PROFESSIONAL LOOK)
+   ======================================= */
+
+/* Section Wrappers */
+#heartSection, #yogaSection {
+  padding: 1px 0;
+  border-radius: 20px;
+  margin: 80px auto;
+  max-width: 1100px;
+  transition: all 0.4s ease;
+}
+
+/* ---------- HEART SECTION ---------- */
+#heartSection {
+  background: linear-gradient(180deg, #fff 0%, #fff5f5 100%);
+  border: 1px solid rgba(255, 99, 99, 0.15);
+  box-shadow: 0 10px 30px rgba(249, 78, 78, 0.05);
+}
+
+#heartSection h3 {
+  color: #b71c1c;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.0px;
+  margin-bottom: 10px;
+}
+
+#heartSection .mini-card {
+  background: #fff;
+  border: 1px solid rgba(249, 78, 78, 0.12);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(249, 78, 78, 0.05);
+  transition: all 0.35s ease;
+}
+
+#heartSection .mini-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(249, 78, 78, 0.12);
+}
+
+#heartSection h4 {
+  color: #c62828;
+  font-size: 1.3rem;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+#heartSection p {
+  color: #252222;
+  font-size: 0.97rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Heart Button */
+#heartSection .btn-primary {
+  background: linear-gradient(90deg, #e53935, #d32f2f);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  /* margin-left: 380px; */
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(229, 57, 53, 0.25);
+}
+
+#heartSection .btn-primary:hover {
+  background: linear-gradient(90deg, #c62828, #b71c1c);
+  box-shadow: 0 6px 18px rgba(229, 57, 53, 0.35);
+  transform: translateY(-2px);
+}
+
+
+/* ---------- YOGA SECTION ---------- */
+#yogaSection {
+  background: linear-gradient(180deg, #fff 0%, #fffbea 100%);
+  border: 1px solid rgba(255, 213, 79, 0.2);
+  box-shadow: 0 10px 30px rgba(255, 213, 79, 0.07);
+}
+
+#yogaSection h3 {
+  color: #a97b00;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 40px;
+}
+
+#yogaSection .mini-card {
+  background: #fff;
+  border: 1px solid rgba(255, 213, 79, 0.15);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: all 0.35s ease;
+}
+
+#yogaSection .mini-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(255, 213, 79, 0.2);
+}
+
+#yogaSection h4 {
+  color: #b48a00;
+  font-size: 1.3rem;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+#yogaSection p {
+  color: #4a4a4a;
+  font-size: 0.97rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Yoga Button */
+#yogaSection .btn-primary {
+  background: linear-gradient(90deg, #f9c600, #e0b200);
+  color: #2d2d2d;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(255, 213, 79, 0.25);
+}
+
+#yogaSection .btn-primary:hover {
+  background: linear-gradient(90deg, #e0b200, #c79500);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(255, 213, 79, 0.35);
+  transform: translateY(-2px);
+}
+
+
+/* ---------- Responsive Adjustments ---------- */
+@media (max-width: 768px) {
+  #heartSection, #yogaSection {
+    padding: 50px 18px;
+  }
+  #heartSection h3, #yogaSection h3 {
+    font-size: 1.6rem;
+  }
+  #heartSection .mini-card, #yogaSection .mini-card {
+    padding: 20px;
+  }
+}
+
+/* =============================================
+   LUNGS SECTION — PREMIUM PROFESSIONAL DESIGN
+   ============================================= */
+
+/* #lungsSection {
+  background: linear-gradient(145deg, #f7fcff, #e6f7ff);
+  border-top: 3px solid rgba(0, 180, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 140, 200, 0.08);
+  border-radius: 18px;
+  padding: 70px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 70px 0;
+} */
+
+/* Heading */
+/* #lungsSection h3 {
+  color: #0077b6;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: 0.5px;
+} */
+
+/* Image Row */
+/* #lungsSection .image-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+#lungsSection .image-row img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
+  border: 2px solid rgba(0, 140, 200, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#lungsSection .image-row img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 150, 255, 0.15);
+} */
+
+/* Info Card */
+/* #lungsSection .mini-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 150, 255, 0.15);
+  border-left: 5px solid #00aaff;
+  border-radius: 14px;
+  padding: 35px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  text-align: center;
+}
+
+#lungsSection .mini-card h4 {
+  color: #0288d1;
+  font-size: 1.3rem;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+#lungsSection .mini-card p {
+  color: #444;
+  font-size: 0.96rem;
+  line-height: 1.6;
+} */
+
+/* Button */
+/* #lungsSection .btn-primary {
+  margin-top: 30px;
+  padding: 12px 30px;
+  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 180, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+#lungsSection .btn-primary:hover {
+  background: linear-gradient(90deg, #0077b6, #005f8c);
+  transform: translateY(-2px);
+} */
+
+/* Responsive */
+/* @media (max-width: 768px) {
+  #lungsSection h3 {
+    font-size: 1.6rem;
+  }
+  #lungsSection .image-row img {
+    width: 130px;
+    height: 130px;
+  }
+} */
+
+/* ===== NAVBAR & HAMBURGER ===== */
+header {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  max-width: 1100px;
+  margin: auto;
+  padding: 12px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #235d12;
+  letter-spacing: 1px;
+}
+
+/* Desktop Menu */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #8a8888;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-links a:hover {
+  color: #0078ff;
+}
+
+/* Hamburger Icon */
+.hamburger {
+  width: 28px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.hamburger span {
+  height: 3px;
+  width: 100%;
+  background-color: #222;
+  border-radius: 3px;
+  transition: 0.3s ease;
+}
+
+/* Keep same look, no cross animation */
+.hamburger.active span {
+  background-color: #0078ff;
+}
+
+/* Side Menu */
+.side-menu {
+  position: fixed;
+  left: -250px;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background: #fafafa;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+  transition: left 0.35s ease;
+  z-index: 999;
+}
+.side-menu a {
+  padding: 15px 30px;
+  text-decoration: none;
+  color: #222;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+  transition: background 0.3s;
+}
+.side-menu a:hover {
+  background: #f3f3f3;
+}
+.side-menu.active {
+  left: 0;
+}
+
+/* Background Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease;
+  z-index: 998;
+}
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .nav-links {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+}
+

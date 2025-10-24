@@ -1,0 +1,432 @@
+<!-- <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FitLife — Recommendations</title>
+  <link rel="stylesheet" href="recommendation.css" />
+  <style>
+    /* small additions for rec page */
+    .rec-hero{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-bottom:10px}
+    .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+    .rec-card{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(3,10,18,0.04)}
+    .exercise-proc{margin-top:8px;color:var(--muted);font-size:0.95rem}
+    .back-btn{margin-top:18px}
+  </style>
+</head>
+<body>
+  <header class="site-header"> 
+    <div class="container header-inner">
+      <div class="brand">FitLife</div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="index.html#calculator">Calculator</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="recTop" class="rec-hero">
+      <div>
+        <h2 id="recTitle">Your Recommendations</h2>
+        <p id="recSubtitle" class="lead">Personalised suggestions based on your BMI</p>
+        <div><strong id="displayBMI">BMI: —</strong> &nbsp; <span id="displayCat">Category: —</span></div>
+      </div>
+      <div>
+        <button onclick="history.back()" class="btn-ghost back-btn">Back</button>
+      </div>
+    </section>
+
+    <section id="dietSection">
+      <h3>Diet Recommendations</h3>
+      <div id="dietGrid" class="rec-grid"></div>
+    </section>
+
+    <section id="exerciseSection" style="margin-top:22px">
+      <h3>Exercise Recommendations</h3>
+      <div id="exerciseGrid" class="rec-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <div>For educational purposes only. Consult a professional for medical advice.</div>
+    <div class="credits">Capstone Project — FitLife</div>
+  </footer>
+
+  <script>
+    // simple hard-coded suggestions per category
+    const data = {
+      Underweight: {
+        diet: [
+          {title:'Calorie-rich meals',detail:'Add healthy calorie sources: Nuts, Dry fruits, Whole Milk, Smoothies, Avocardos, Fatty Fish.'},
+          {title:'Protein focus',detail:'Include lean meats, eggs, legumes to support muscle gain.'},
+          {title:'Frequent meals',detail:'Eat 5–6 smaller meals across the day.'},
+          {title:'Complex carbs',detail:'Oats, brown rice, potatoes for caloric support.'},
+          {title:'Healthy snacks',detail:'Peanut butter, yogurt, bananas between meals.'},
+        ],
+        exercise: [
+          {title:'Strength Training',detail:'3×/week, focus on compound lifts (squats, deadlifts, bench). Procedure: 3 sets, 6–10 reps. Progressive overload.'},
+          {title:'Compound Exercises',detail:'Squats, deadlifts, rows. Procedure: focus on form and increasing weight gradually.'},
+          {title:'Rest & Recovery',detail:'Allow 48–72 hours between heavy sessions. Sleep 7–9 hrs.'},
+          {title:'Low-intensity cardio',detail:'Short walks to maintain appetite; avoid long cardio that burns many calories.'},
+          {title:'Core strengthening',detail:'Planks and transverse core work: 3 sets of 30–45s.'},
+        ]
+      },
+      Normal: {
+        diet: [
+          {title:'Balanced macro split',detail:'Include carbs, protein, fats in every meal.'},
+          {title:'Portion control',detail:'Maintain calorie intake for weight stability.'},
+          {title:'Whole foods',detail:'Fruits, vegetables, legumes and whole grains.'},
+          {title:'Protein with every meal',detail:'Helps maintain muscle mass: 20–30g per meal.'},
+          {title:'Hydration',detail:'2–3L water daily depending on activity.'},
+        ],
+        exercise: [
+          {title:'Mixed Training',detail:'Combine cardio+strength 3–5×/week. Procedure: 30–45 min sessions.'},
+          {title:'HIIT (optional)',detail:'10–20 min HIIT once/twice weekly. Procedure: 20s hard / 40s rest, 8–12 rounds.'},
+          {title:'Mobility work',detail:'Daily mobility & stretching: 10–15 min.'},
+          {title:'Resistance sessions',detail:'2–3 strength sessions: 3 sets of 8–12 reps.'},
+          {title:'Active recovery',detail:'Light yoga or walking on rest days.'},
+        ]
+      },
+      Overweight: {
+        diet: [
+          {title:'Calorie deficit',detail:'Reduce daily calories moderately (250–500 kcal deficit).'},
+          {title:'Protein rich diet',detail:'Help preserve muscle while losing fat.'},
+          {title:'Reduce processed foods',detail:'Limit sugary drinks and fried foods.'},
+          {title:'Increase vegetables',detail:'High volume, low calorie foods to fill you up.'},
+          {title:'Controlled portions',detail:'Measure and plan meals to avoid overeating.'},
+        ],
+        exercise: [
+          {title:'Cardio workouts',detail:'30–45 min moderate cardio (brisk walk, cycling). Procedure: 5×/week.'},
+          {title:'Strength training',detail:'2–3×/week to preserve muscle: compound lifts, 3 sets of 8–12 reps.'},
+          {title:'Interval training',detail:'HIIT 1–2×/week if suitable: 10–20 min.'},
+          {title:'Daily steps goal',detail:'Aim for 7–10k steps/day.'},
+          {title:'Flexibility & core',detail:'Stretching & core work 2–3×/week.'},
+        ]
+      },
+      Obese: {
+        diet: [
+          {title:'Medical guidance',detail:'Seek a clinician/dietitian before starting aggressive diet.'},
+          {title:'Structured low-calorie plan',detail:'Supervised calorie reduction with nutrient adequacy.'},
+          {title:'High protein, low processed carbs',detail:'Helps satiety and preserves lean mass.'},
+          {title:'Vegetable heavy meals',detail:'High fiber, low energy density foods.'},
+          {title:'Track intake',detail:'Use a food diary or app to monitor calories.'},
+        ],
+        exercise: [
+          {title:'Low-impact cardio',detail:'Swimming, cycling, brisk walking. Procedure: 20–40 min, build gradually.'},
+          {title:'Beginner strength',detail:'Bodyweight and machine-based strength 2×/week.'},
+          {title:'Professional supervision',detail:'If high BMI, exercise with guidance initially.'},
+          {title:'Flexibility & balance',detail:'Daily stretching to reduce injury risk.'},
+          {title:'Gradual progression',detail:'Increase duration/intensity slowly to avoid injury.'},
+        ]
+      }
+    };
+
+    function getQueryParams(){
+      const params = new URLSearchParams(window.location.search);
+      return {
+        bmi: params.get('bmi') || '—',
+        category: params.get('category') || '—'
+      };
+    }
+
+    function render() {
+      const {bmi, category} = getQueryParams();
+      document.getElementById('displayBMI').textContent = `BMI: ${bmi}`;
+      document.getElementById('displayCat').textContent = `Category: ${category}`;
+
+      const dietGrid = document.getElementById('dietGrid');
+      const exerciseGrid = document.getElementById('exerciseGrid');
+
+      const catData = data[category] || data['Normal'];
+
+      // Diet
+      dietGrid.innerHTML = '';
+      catData.diet.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rec-card';
+        div.innerHTML = `<h4>${item.title}</h4><p class="exercise-proc">${item.detail}</p>`;
+        dietGrid.appendChild(div);
+      });
+
+      // Exercise + procedure
+      exerciseGrid.innerHTML = '';
+      catData.exercise.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rec-card';
+        div.innerHTML = `<h4>${item.title}</h4><p class="exercise-proc">${item.detail}</p>`;
+        exerciseGrid.appendChild(div);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FitLife — Recommendations</title>
+  <link rel="stylesheet" href="recommendation.css" />
+  <style>
+    /* small additions for rec page */
+    .rec-hero{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-bottom:10px}
+    .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+    .rec-card{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(3,10,18,0.04)}
+    .exercise-proc{margin-top:8px;color:var(--muted);font-size:0.95rem}
+    .back-btn{margin-top:18px}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">FitLife</div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="index.html#calculator">Calculator</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="recTop" class="rec-hero">
+      <div>
+        <h2 id="recTitle">Your Recommendations</h2>
+        <p id="recSubtitle" class="lead">Personalised suggestions based on your BMI</p>
+        <div><strong id="displayBMI">BMI: —</strong> &nbsp; <span id="displayCat">Category: —</span></div>
+      </div>
+      <div>
+        <button onclick="history.back()" class="btn-ghost back-btn">Back</button>
+      </div>
+    </section>
+
+    <section id="dietSection">
+      <h3>Diet Recommendations</h3>
+      <div id="dietGrid" class="rec-grid"></div>
+    </section>
+
+    <section id="exerciseSection" style="margin-top:22px">
+      <h3>Exercise Recommendations</h3>
+      <div id="exerciseGrid" class="rec-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <div>For educational purposes only. Consult a professional for medical advice.</div>
+    <div class="credits">Capstone Project — FitLife</div>
+  </footer>
+
+  <script>
+    // updated suggestions per category (with examples)
+    const data = {
+      Underweight: {
+        diet: [
+          {
+            title:'Calorie-rich meals',
+            detail:'Add healthy calorie sources to your diet.',
+            examples:['Nuts','Dry fruits','Whole milk','Smoothies','Avocados','Fatty fish']
+          },
+          {
+            title:'Protein focus',
+            detail:'Include lean meats, eggs, legumes to support muscle gain.',
+            examples:['Eggs','Chicken breast','Paneer','Lentils','Tofu']
+          },
+          {
+            title:'Frequent meals',
+            detail:'Eat 5–6 smaller meals across the day.',
+            examples:['Mini sandwiches','Fruit bowls','Yogurt with granola']
+          },
+          {
+            title:'Complex carbs',
+            detail:'Oats, brown rice, potatoes for caloric support.',
+            examples:['Oats','Brown rice','Sweet potatoes']
+          },
+          {
+            title:'Healthy snacks',
+            detail:'Peanut butter, yogurt, bananas between meals.',
+            examples:['Banana shake','Peanut butter toast','Greek yogurt']
+          }
+        ],
+        exercise: [
+          {title:'Strength Training',detail:'3×/week, focus on compound lifts (squats, deadlifts, bench). Procedure: 3 sets, 6–10 reps. Progressive overload.'},
+          {title:'Compound Exercises',detail:'Squats, deadlifts, rows. Procedure: focus on form and increasing weight gradually.'},
+          {title:'Rest & Recovery',detail:'Allow 48–72 hours between heavy sessions. Sleep 7–9 hrs.'},
+          {title:'Low-intensity cardio',detail:'Short walks to maintain appetite; avoid long cardio that burns many calories.'},
+          {title:'Core strengthening',detail:'Planks and transverse core work: 3 sets of 30–45s.'}
+        ]
+      },
+      Normal: {
+        diet: [
+          {
+            title:'Balanced macro split',
+            detail:'Include carbs, protein, and fats in every meal.',
+            examples:['Rice + lentils','Oats with fruits','Whole wheat roti with vegetables']
+          },
+          {
+            title:'Portion control',
+            detail:'Maintain calorie intake for weight stability.',
+            examples:['Use smaller plates','Track portion sizes','Avoid second servings']
+          },
+          {
+            title:'Whole foods',
+            detail:'Eat fruits, vegetables, legumes and whole grains.',
+            examples:['Spinach','Apple','Brown rice','Chickpeas']
+          },
+          {
+            title:'Protein with every meal',
+            detail:'Helps maintain muscle mass.',
+            examples:['Eggs','Paneer','Fish','Soybean']
+          },
+          {
+            title:'Hydration',
+            detail:'2–3L water daily depending on activity.',
+            examples:['Plain water','Coconut water','Herbal tea']
+          }
+        ],
+        exercise: [
+          {title:'Mixed Training',detail:'Combine cardio+strength 3–5×/week. Procedure: 30–45 min sessions.'},
+          {title:'HIIT (optional)',detail:'10–20 min HIIT once/twice weekly. Procedure: 20s hard / 40s rest, 8–12 rounds.'},
+          {title:'Mobility work',detail:'Daily mobility & stretching: 10–15 min.'},
+          {title:'Resistance sessions',detail:'2–3 strength sessions: 3 sets of 8–12 reps.'},
+          {title:'Active recovery',detail:'Light yoga or walking on rest days.'}
+        ]
+      },
+      Overweight: {
+        diet: [
+          {
+            title:'Calorie deficit',
+            detail:'Reduce daily calories moderately (250–500 kcal deficit).',
+            examples:['Smaller portions','Avoid fried foods','Limit sugar intake']
+          },
+          {
+            title:'Protein rich diet',
+            detail:'Helps preserve muscle while losing fat.',
+            examples:['Egg whites','Chicken breast','Paneer','Lentils']
+          },
+          {
+            title:'Reduce processed foods',
+            detail:'Limit sugary drinks and fried foods.',
+            examples:['Avoid soft drinks','Avoid chips','Limit pastries']
+          },
+          {
+            title:'Increase vegetables',
+            detail:'High volume, low calorie foods to fill you up.',
+            examples:['Broccoli','Cucumber','Spinach','Carrot']
+          },
+          {
+            title:'Controlled portions',
+            detail:'Measure and plan meals to avoid overeating.',
+            examples:['Use measuring cups','Avoid seconds','Eat slowly']
+          }
+        ],
+        exercise: [
+          {title:'Cardio workouts',detail:'30–45 min moderate cardio (brisk walk, cycling). Procedure: 5×/week.'},
+          {title:'Strength training',detail:'2–3×/week to preserve muscle: compound lifts, 3 sets of 8–12 reps.'},
+          {title:'Interval training',detail:'HIIT 1–2×/week if suitable: 10–20 min.'},
+          {title:'Daily steps goal',detail:'Aim for 7–10k steps/day.'},
+          {title:'Flexibility & core',detail:'Stretching & core work 2–3×/week.'}
+        ]
+      },
+      Obese: {
+        diet: [
+          {
+            title:'Medical guidance',
+            detail:'Seek a clinician/dietitian before starting aggressive diet.',
+            examples:['Dietitian consultation','Medical checkup','Personalized plan']
+          },
+          {
+            title:'Structured low-calorie plan',
+            detail:'Supervised calorie reduction with nutrient adequacy.',
+            examples:['Meal prep plans','High-fiber foods','Protein shakes']
+          },
+          {
+            title:'High protein, low processed carbs',
+            detail:'Helps satiety and preserves lean mass.',
+            examples:['Eggs','Grilled chicken','Legumes']
+          },
+          {
+            title:'Vegetable heavy meals',
+            detail:'High fiber, low energy density foods.',
+            examples:['Cabbage','Cauliflower','Salad greens']
+          },
+          {
+            title:'Track intake',
+            detail:'Use a food diary or app to monitor calories.',
+            examples:['MyFitnessPal app','Calorie tracker','Diet journal']
+          }
+        ],
+        exercise: [
+          {title:'Low-impact cardio',detail:'Swimming, cycling, brisk walking. Procedure: 20–40 min, build gradually.'},
+          {title:'Beginner strength',detail:'Bodyweight and machine-based strength 2×/week.'},
+          {title:'Professional supervision',detail:'If high BMI, exercise with guidance initially.'},
+          {title:'Flexibility & balance',detail:'Daily stretching to reduce injury risk.'},
+          {title:'Gradual progression',detail:'Increase duration/intensity slowly to avoid injury.'}
+        ]
+      }
+    };
+
+    function getQueryParams(){
+      const params = new URLSearchParams(window.location.search);
+      return {
+        bmi: params.get('bmi') || '—',
+        category: params.get('category') || '—'
+      };
+    } 
+
+    function render() {
+      const {bmi, category} = getQueryParams();
+      document.getElementById('displayBMI').textContent = `BMI: ${bmi}`;
+      document.getElementById('displayCat').textContent = `Category: ${category}`;
+
+      const dietGrid = document.getElementById('dietGrid');
+      const exerciseGrid = document.getElementById('exerciseGrid');
+
+      const catData = data[category] || data['Normal'];
+
+      // Diet
+      dietGrid.innerHTML = '';
+      catData.diet.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rec-card';
+        div.innerHTML = `
+          <h4>${item.title}</h4>
+          <p class="exercise-proc">${item.detail}</p>
+          ${item.examples ? `<ul class="example-list">${item.examples.map(ex => `<li>${ex}</li>`).join('')}</ul>` : ''}
+        `;
+        dietGrid.appendChild(div);
+      });
+
+      // Exercise + procedure
+      exerciseGrid.innerHTML = '';
+      catData.exercise.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'rec-card';
+        div.innerHTML = `<h4>${item.title}</h4><p class="exercise-proc">${item.detail}</p>`;
+        exerciseGrid.appendChild(div);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

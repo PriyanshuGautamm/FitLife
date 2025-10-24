@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FitLife — Heart Health</title>
+  <link rel="stylesheet" href="recommendation.css" />
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --text-light: #222;
+      --text-dark: #eee;
+      --card-light: #f9f9f9;
+      --card-dark: #1f1f1f;
+      --accent: #d9376e;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: all 0.4s ease;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .site-header {
+      background: var(--accent);
+      color: #fff;
+      padding: 15px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 16px;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 18px;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .dark-toggle {
+      cursor: pointer;
+      background: none;
+      border: 2px solid #fff;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.9rem;
+      color: #fff;
+      transition: 0.3s;
+    }
+    .dark-toggle:hover {
+      background: #fff;
+      color: var(--accent);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 18px;
+    }
+
+    h2, h3 {
+      text-align: center;
+      margin-bottom: 18px;
+      color: var(--accent);
+    }
+
+    .section {
+      background: var(--card-light);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: 0.4s;
+    }
+
+    body.dark .section {
+      background: var(--card-dark);
+      box-shadow: 0 4px 12px rgba(255,255,255,0.08);
+    }
+
+    .section:hover {
+      transform: translateY(-3px);
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+      margin-top: 12px;
+    }
+
+    .rec-card {
+      background: var(--bg-light);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: 0.4s;
+    }
+    body.dark .rec-card {
+      background: var(--card-dark);
+      box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+    }
+
+    .rec-card:hover {
+      transform: scale(1.03);
+    }
+
+    .rec-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .rec-card h4 {
+      margin: 10px 0 6px;
+      color: var(--accent);
+    }
+
+    .rec-card p {
+      font-size: 0.9rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      margin: 20px auto;
+      cursor: pointer;
+      display: block;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: #b52c5a;
+    }
+
+    .scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 25px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .scroll-top.show {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 10px;
+      background: #f5f5f5;
+      color: #666;
+      margin-top: 40px;
+    }
+    body.dark footer {
+      background: #1f1f1f;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">FitLife</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="index.html#heartSection">Heart</a>
+        <button class="dark-toggle" id="themeBtn">🌙 Dark</button>    
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Heart Health & Awareness</h2>
+    <section class="section">
+      <h3>About Human Heart</h3>
+      <p>
+        The human heart is a powerful muscular organ that pumps blood throughout the body. It continuously supplies oxygen and nutrients while removing carbon dioxide and waste. A healthy heart ensures the proper functioning of every organ. Modern lifestyles, stress, and poor diets often affect heart health, making awareness and prevention essential.
+      </p>
+    </section>
+
+    <section class="section">
+      <h3>Heart Attack vs Cardiac Arrest</h3>
+      <div class="rec-grid">
+        <div class="rec-card">
+          <img src="icon/heartattack.jpg" alt="Heart Attack" />
+          <h4>Heart Attack</h4>
+          <p>A heart attack occurs when blood flow to part of the heart is blocked, often by a blood clot. It damages heart muscles and requires immediate medical care.</p>
+        </div>
+        <div class="rec-card">
+          <img src="icon/cardiacarrest.jpg" alt="Cardiac Arrest" />
+          <h4>Cardiac Arrest</h4>
+          <p>Cardiac arrest happens when the heart suddenly stops beating. It is more serious than a heart attack and requires CPR or defibrillation immediately.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Symptoms of Heart Disease</h3>
+      <ul>
+        <li>Chest pain or pressure</li>
+        <li>Shortness of breath</li>
+        <li>Dizziness or fainting</li>
+        <li>Irregular heartbeat</li>
+        <li>Fatigue or weakness</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3>Precautions for Heart Health</h3>
+      <ul>
+        <li>Eat a balanced, low-fat diet</li>
+        <li>Exercise regularly (30 min daily walk)</li>
+        <li>Avoid smoking and limit alcohol</li>
+        <li>Manage stress and get enough sleep</li>
+        <li>Go for regular heart check-ups</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3>Yoga for Heart Health</h3>
+      <div class="rec-grid">
+        <div class="rec-card">
+          <img src="icon/yoga1.jpeg" alt="Tadasana" />
+          <h4>Tadasana</h4>
+          <p>Improves blood circulation and calms the nervous system. Hold for 30 seconds.</p>
+        </div>
+        <div class="rec-card">
+          <img src="icon/yoga2.jpeg" alt="Bhujangasana" />
+          <h4>Bhujangasana</h4>
+          <p>Strengthens chest muscles and improves oxygen flow to the heart.</p>
+        </div>
+        <div class="rec-card">
+          <img src="icon/yoga3.jpeg" alt="Vrikshasana" />
+          <h4>Vrikshasana</h4>
+          <p>Enhances body balance and mental focus, reducing stress and anxiety.</p>
+        </div>
+      </div>
+    </section>
+
+    <button onclick="history.back()" class="back-btn">← Back</button>
+  </main>
+
+  <footer>
+    <p>© 2025 FitLife | For educational purposes only</p>
+  </footer>
+
+  <button class="scroll-top" id="scrollTop">↑</button>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    const body = document.body;
+    themeBtn.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      themeBtn.textContent = body.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
+    });
+
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('show', window.scrollY > 300);
+    });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  </script>
+</body>
+</html>

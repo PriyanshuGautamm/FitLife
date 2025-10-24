@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FitLife — BMI Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+  <nav class="navbar">
+    <div class="left-section">
+      <!-- Hamburger Icon -->
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <h2 class="logo">FitLife</h2>
+    </div>
+
+    <!-- Normal Nav Links (for desktop) -->
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#calculator">Calculator</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Slide Side Menu -->
+  <div class="side-menu" id="sideMenu">
+    <a href="#home">🏠 Home</a>
+    <a href="#calculator">📟 BMI Calculator</a>
+    <a href="#heartSection">🫀 Your Heart</a>
+    <a href="#yogaSection">🧘🏻‍♀️ Yoga</a>
+    <a href="#about">🆎 About</a>
+    <a href="#contact">📞 Contact Us</a>
+  </div>
+
+  <!-- Overlay (for closing on outside click) -->
+  <div class="overlay" id="overlay"></div>
+</header>
+
+  <!-- HERO -->
+  <section id="home" class="hero container">
+    <div class="hero-left">
+      <h1>Welcome to FitLife</h1>
+      <p class="lead">BMI-Based Health &amp; Fitness Recommendation System</p>
+      <button id="scrollToCalc" class="btn-primary">Calculate Your BMI</button>
+    </div>
+    <div class="hero-right">
+      <!-- illustration placeholder -->
+      <img src="icon/lady.jpeg" alt="fit-ill" class="hero-illustration">
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section id="calculator" class="calculator container">
+    <div class="calc-left card">
+      <h2>BMI Calculator</h2>
+      <label>Height
+        <div class="inline-inputs">
+          <input id="height" type="number" placeholder="cm" min="30" max="300" />
+          <select id="height-unit" class="unit">
+            <option value="cm">cm</option>
+            <option value="m">m</option>
+            <option value="ft">ft</option>
+          </select>
+        </div>
+      </label>
+
+      <label>Weight
+        <div class="inline-inputs">
+          <input id="weight" type="number" placeholder="kg" min="2" max="500" />
+          <select id="weight-unit" class="unit">
+            <option value="kg">kg</option>
+            <option value="lb">lb</option>
+          </select>
+        </div>
+      </label>
+
+      <div class="actions">
+        <button id="calculateBtn" class="btn-primary">Calculate BMI</button>
+        <button id="resetBtn" class="btn-ghost">Reset</button>
+      </div>
+    </div>
+
+    <div class="calc-right card result-card">
+      <div class="gauge" aria-hidden="true">
+        <!-- simple gauge circle / placeholder -->
+        <div id="gaugeNeedle" class="needle"></div>
+      </div>
+
+      <div class="result-text">
+        <div class="bmi-value" id="bmiValue">—</div>
+        <div class="bmi-category" id="bmiCategory">Category: —</div>
+      </div>
+
+      <button id="viewRec" class="btn-primary" disabled>View Recommendations</button>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATION PREVIEW CARDS (small) -->
+  <section id="recommendationsPreview" class="container preview-cards">
+    <h3>Quick Information</h3>
+    <div class="cards2-row">
+      <div class="minii-card">
+        <h4>What is BMI?</h4>
+        <p>BMI or Body Mass Index is a simple calculation that uses a person's height and weight to estimate body fat and categorize them into group like Underweight, Normal, Overweight and Obese.</p>
+      </div>
+      <div class="minii-card">
+        <h4>How to calculate BMI?</h4>
+        <p>The standard formula of BMI: It is the ratio of person's body weight (in kg) and the square of person's height (in m).</p>
+        <p>BMI = Weight (kg)/ (Height (m))^2</p>
+      </div>
+      <div class="minii-card">
+        <h4>BMI Table</h4>
+        <p>Underweight: BMI below 18.5</p>
+        <p>Normal: BMI 18.5-24.9</p>
+        <p>Overweight: BMI>25.0</p>
+        <p>Obese: BMI>30.0</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Existing code unchanged until Quick Suggestion section -->
+
+<!-- HEART SECTION -->
+<section id="heartSection" class="container preview-cards">
+  <h3>Check Your Heart</h3>
+  <div class="cards-row">
+    <div class="mini-card">
+      <img src="icon/heart1.jpeg" alt="heart" class="quick-img"> <img src="icon/heart2.jpeg" alt="heart" class="quick-img"> <img src="icon/heart3.jpeg" alt="heart" class="quick-img">
+      <h4>Know Your Heart</h4>
+      <p>A healthy heart beats regularly, pumps blood efficiently, and keeps you energetic. Learn how to check your heart health.</p>
+      <p>Common diseases: Coronary artery disease, Heart attack, Arrhythmia, Hypertension.</p>
+      <p>Symptoms: Chest pain, shortness of breath, dizziness, fatigue.</p>
+      <p>Precautionary measures: Balanced diet, regular exercise, avoid smoking, manage stress.</p>
+      <button class="btn-primary" onclick="window.location.href='heart.html'">Check Your Heart</button>
+    </div>
+  </div>
+</section>
+
+<!-- YOGA SECTION -->
+<section id="yogaSection" class="container preview-cards">
+  <h3>Yoga & Wellness</h3>
+  <div class="cards-row">
+    <div class="mini-card">
+      <img src="icon/yoga1.jpeg" alt="yoga" class="quick-img"> <img src="icon/yoga2.jpeg" alt="yoga" class="quick-img"> <img src="icon/yoga3.jpeg" alt="yoga" class="quick-img">
+      <h4>What is Yoga?</h4>
+      <p>Yoga is a holistic practice combining physical postures, breathing techniques, and meditation for mental & physical health.</p>
+      <p>Benefits: Flexibility, stress reduction, improved posture, increased energy.</p>
+      <button class="btn-primary" onclick="window.location.href='yoga.html'">Explore Yoga</button>
+    </div>
+  </div>
+</section>
+
+<!-- lungs section -->
+ 
+<!-- <section id="lungsSection" class="section-container">
+  <h3>Check Your Lungs</h3>
+
+  <div class="image-row">
+    <img src="icon/lungs1.jpg" alt="Lungs Image 1">
+    <img src="icon/lungs2.jpg" alt="Lungs Image 2">
+    <img src="icon/lungs3.jpg" alt="Lungs Image 3">
+  </div>
+
+  <div class="mini-card">
+    <h4>About Your Lungs</h4>
+    <p>
+      Lungs are vital organs that help you breathe and provide oxygen to your body. 
+      Keeping them healthy is essential for overall well-being. 
+      Avoid smoking, stay away from polluted air, and perform regular breathing exercises.
+    </p>
+
+    <h4>Common Lung Issues</h4>
+    <p>
+      Some common problems include Asthma, Bronchitis, Pneumonia, and COPD. 
+      Symptoms may include shortness of breath, coughing, chest pain, or fatigue.
+    </p>
+
+    <h4>Precautions</h4>
+    <p>
+      Practice deep breathing, stay hydrated, avoid dust and smoke, 
+      and include foods rich in antioxidants like turmeric, ginger, and garlic.
+    </p>
+
+    <button class="btn-primary">Check Your Lungs</button>
+  </div>
+</section> -->
+
+<!-- Existing About & Contact sections remain unchanged -->
+
+  <section id="recommendationsPreview" class="container preview-cards">
+    <h3>Quick Suggestion</h3>
+    <div class="cards-row">
+      <div class="mini-card">
+        <img src="icon/diet.jpeg" alt="food" class="quick-img">
+        <h4>Diet</h4>
+        <p>Balanced diet: It includes a vatiety of foods which contains all essential nutrients like Carbohydrates, Proteins, Fats, vitamins, Minerals and water.</p>
+        <p>Example: Fruits and Vegetable, Green leafy vegetable, Dairy products, whole grains and water.</p>
+      </div>
+      <div class="mini-card">
+        <img src="icon/exercise.jpeg" alt="workout" class="quick-img">
+        <h4>Exercise</h4>
+        <p>Combine cardio + strength training, 3–5 times/week.</p>
+        <p>Cardio: Running, Jumping rope, Swimming, Dancing and Hiking</p>
+        <p>Strength traning: PushUps, PullUps, Squarts, Planks and Weight traning</p>
+      </div>
+      <div class="mini-card">
+        <img src="icon/lifestyle.jpeg" alt="lifestyle" class="quick-img">
+        <h4>Lifestyle</h4>
+        <p>Sleep, hydration and stress management.</p>
+        <p>Atleast 6-7 hrs of deep sleep. </p>
+        <p>3-4 liters of daily water intake. </p> 
+        <p>1/2-1 hrs of daily maditation for stress management.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="container about">
+    <h3>About FitLife</h3>
+    <p>FitLife helps you calculate BMI and gives personalized diet & exercise suggestions to maintain or achieve a healthy BMI.</p>
+  </section>
+
+  <!-- CONTACT -->
+  <footer id="contact" class="site-footer container">
+    <div>
+      <h4>Contact</h4>
+      <p>Email: team@fitlife.example</p>
+    </div>
+    <div class="credits">Capstone Project — FitLife</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

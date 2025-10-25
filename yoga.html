@@ -13,7 +13,7 @@
       --text-dark: #eee;
       --card-light: #f9f9f9;
       --card-dark: #1f1f1f;
-      --accent: #d9ce37; /* Using the same accent color */
+      --accent: #d9b337; /* Using the same accent color */
     }
 
     body {
@@ -88,29 +88,36 @@
       color: var(--accent);
     }
     
-    /* Unique styling for the intro section in yoga.html */
-    .intro-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:36px;background:linear-gradient(90deg, rgba(249,238,209,0.6), rgba(255,249,236,0.8));border-radius:14px;box-shadow:var(--shadow);margin:20px 0}
-    body.dark .intro-hero{background:linear-gradient(90deg, rgba(30,30,30,0.5), rgba(20,20,20,0.5));}
-    .intro-hero-left{max-width:68%}
-    .intro-hero h1{margin:0;font-size:1.9rem;color:var(--accent)}
-    .intro-hero p.lead{margin:8px 0 0;color:var(--muted);font-size:1rem}
-    .section {
-      background: var(--card-light);
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 28px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: 0.4s;
-    }
+    .intro-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 48px 36px;
+  background: linear-gradient(135deg, #fef6e4 0%, #fde68a 40%, #fcd34d 100%);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  margin: 40px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    body.dark .section {
-      background: var(--card-dark);
-      box-shadow: 0 4px 12px rgba(255,255,255,0.08);
-    }
+.intro-hero:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
 
-    .section:hover {
-      transform: translateY(-3px);
-    }
+body.dark .intro-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 40%, #3b3b3b 100%);
+}
+    
+    /* subsection title */
+    .section-title{display:flex;align-items:center;gap:12px;margin-top:58px}
+    .section-title h3{margin:0;color:var(--accent);font-size:1.25rem}
+    .section-sub{color:var(--muted);font-size:0.95rem;margin-left:auto}
+    .section{padding: 20px;}
+    
+    /* specialised subsection cards keep same rec-card layout */
+    .rec-subgroup{margin-top:14px;padding: 20px;}
 
     .rec-grid {
       display: grid;
@@ -215,6 +222,130 @@
       margin-top: 5px;
       font-size: 0.85rem;
     }
+    /* Consistent spacing between all main sections */
+section {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+section h3 {
+  margin-bottom: 24px;
+}
+
+.rec-grid {
+  gap: 28px; /* thoda relaxed look */
+}
+h3 {
+  font-size: 1.6rem;
+  letter-spacing: 0.5px;
+}
+
+p.exercise-proc {
+  line-height: 1.6;
+}
+/* Fix text color in dark mode */
+body.dark p,
+body.dark .exercise-proc {
+  color: #fff !important;
+}
+/* Divider line between sections (except the hero/yoga recommendation section) */
+section:not(:last-child):not(.intro-hero)::after {
+  content: "";
+  display: block;
+  width: 80%;
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+  margin: 50px auto 0;
+}
+body.dark section:not(:last-child):not(.intro-hero)::after {
+  background: rgba(255,255,255,0.1);
+}
+/* Left align only specific section headings */
+.section h3:first-child {
+  text-align: left;
+}
+/* Hover animation for all major sections */
+.section:hover, 
+#yogaSpecial:hover {
+  transform: scale(1.01);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-radius: 10px;
+}
+
+/* Slight background tint on hover */
+body.dark .section:hover, 
+body.dark #yogaSpecial:hover {
+  box-shadow: 0 8px 20px rgba(255,255,255,0.08);
+}
+/* ---------- RESPONSIVE FIXES ---------- */
+
+/* For tablets and phones */
+@media (max-width: 768px) {
+  .intro-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .hero-left h1 {
+    font-size: 1.8rem;
+  }
+
+  .rec-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .rec-card img {
+    height: 130px;
+  }
+
+  section {
+    margin: 40px 0;
+  }
+
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 6px;
+  }
+
+  footer {
+    font-size: 0.9rem;
+  }
+}
+
+/* For very small phones (under 480px) */
+@media (max-width: 480px) {
+  .header-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  nav a {
+    margin: 6px;
+    display: inline-block;
+  }
+
+  .dark-toggle {
+    padding: 4px 12px;
+  }
+
+  h1, h2, h3 {
+    font-size: 1.3rem;
+  }
+
+  .rec-card {
+    padding: 10px;
+  }
+
+  .rec-card img {
+    height: 110px;
+  }
+}
   </style>
 </head>
 <body>
@@ -266,312 +397,73 @@
       <h3>Basic Yoga Poses</h3>
       <div class="rec-grid">
         <div class="rec-card">
-          <img src="icon/yoga1.jpeg" alt="Tadasana" />
-          <h4>Tadasana</h4>
-          <p>Stand straight, feet together, stretch arms overhead. Hold 30s.</p>
-        </div>
-        <div class="rec-card">
-          <img src="icon/yoga2.jpeg" alt="Bhujangasana" />
-          <h4>Bhujangasana</h4>
-          <p>Lie on stomach, lift chest using back muscles. Hold 20–30s.</p>
-        </div>
-        <div class="rec-card">
-          <img src="icon/yoga3.jpeg" alt="Chakrasana" />
-          <h4>Chakrasana</h4>
-          <p>Lie on back, lift body forming an arch. Hold 15–20s.</p>
-        </div>
-        </div>
-    </section>
-
-    <section class="section" id="yogaSpecial">
-      <h3>Specialised Yoga for Health Conditions</h3>
-      <div class="rec-grid">
-        <div class="rec-card">
-          <h4>Respiratory Issues</h4>
-          <p>Pranayama, Anulom Vilom, Kapalbhati – improve lung capacity & breathing.</p>
-        </div>
-        <div class="rec-card">
-          <h4>Height Increase</h4>
-          <p>Tadasana, Chakrasana, Bhujangasana, Hanging – stretch & strengthen spine.</p>
-        </div>
-        <div class="rec-card">
-          <h4>Eye Health</h4>
-          <p>Tratak & eye exercises – improve focus and vision health.</p>
-        </div>
-      </div>
-      <p style="margin-top:12px;text-align:center;font-size:0.9rem;color:var(--accent);">
-        Disclaimer: For educational purposes only. Consult a doctor before medical implementation.
-      </p>
-    </section>
-
-    <button onclick="history.back()" class="back-btn">← Back</button>
-  </main>
-
-  <footer>
-    <p>© 2025 FitLife | For educational purposes only</p>
-  </footer>
-
-  <button class="scroll-top" id="scrollTop">↑</button>
-
-  <script>
-    // Dark Mode Toggle Logic
-    const themeBtn = document.getElementById('themeBtn');
-    const body = document.body;
-    themeBtn.addEventListener('click', () => {
-      body.classList.toggle('dark');
-      themeBtn.textContent = body.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
-    });
-
-    // Scroll to Top Button Logic
-    const scrollBtn = document.getElementById('scrollTop');
-    window.addEventListener('scroll', () => {
-      scrollBtn.classList.toggle('show', window.scrollY > 300);
-    });
-    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  </script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FitLife — Yoga Recommendations</title>
-  <link rel="stylesheet" href="recommendation.css" />
-  <style>
-    /* =========================
-       Yoga Page — Professional
-       ========================= */
-    :root{
-      --accent:#b98a00;      /* yoga golden */
-      --muted:#6b7280;
-      --bg:#fbfbfc;
-      --card:#ffffff;
-      --text:#1f2937;
-      --shadow: 0 8px 30px rgba(15,23,42,0.06);
-      --container:1100px;
-    }
-    /* Dark mode vars */
-    body.dark {
-      --bg:#0b0f11;
-      --card:#0f1416;
-      --text:#e6eef3;
-      --muted:#9aa6b2;
-      --shadow: 0 10px 30px rgba(0,0,0,0.45);
-    }
-
-    html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--text);background:var(--bg);transition:background 0.35s,color 0.35s}
-    .container{max-width:var(--container);margin:0 auto;padding:28px}
-
-    /* header */
-    .site-header{background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,0.06);position:sticky;top:0;z-index:50}
-    .header-inner{display:flex;align-items:center;justify-content:space-between;max-width:var(--container);margin:0 auto;padding:12px 28px}
-    .brand{font-weight:700;color:var(--accent);font-size:1.3rem}
-    .main-nav a{margin-left:18px;color:var(--muted);text-decoration:none;font-weight:600}
-    .main-nav a:hover{color:var(--text)}
-
-    /* top hero */
-    .hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:36px;background:linear-gradient(90deg, rgba(249,238,209,0.6), rgba(255,249,236,0.8));border-radius:14px;box-shadow:var(--shadow);margin:20px 0}
-    body.dark .hero{background:linear-gradient(90deg, rgba(30,30,30,0.5), rgba(20,20,20,0.5));}
-    .hero-left{max-width:68%}
-    .hero h1{margin:0;font-size:1.9rem;color:var(--accent)}
-    .hero p.lead{margin:8px 0 0;color:var(--muted);font-size:1rem}
-
-    .hero-right img{width:160px;height:120px;object-fit:cover;border-radius:10px}
-
-    /* back button */
-    .back-btn{background:transparent;border:1px solid #e6e6e6;padding:8px 14px;border-radius:10px;cursor:pointer}
-    .back-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.06)}
-
-    /* grids */
-    .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:18px}
-    .rec-card{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow);transition:transform 0.28s,box-shadow 0.28s;display:flex;flex-direction:column}
-    .rec-card:hover{transform:translateY(-6px)}
-    .rec-card img{width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px}
-    .rec-card h4{margin:6px 0;color:var(--accent);font-size:1.05rem}
-    .exercise-proc{font-size:0.95rem;color:var(--text);line-height:1.5;margin-top:auto}
-
-    /* yoga info block */
-    .yoga-info{background:var(--card);padding:22px;border-radius:12px;box-shadow:var(--shadow);margin-top:20px;line-height:1.6}
-    .yoga-info h3{color:var(--accent);text-align:center;margin:0 0 12px}
-    .yoga-info p{color:var(--text);margin:8px 0}
-
-    /* subsection title */
-    .section-title{display:flex;align-items:center;gap:12px;margin-top:28px}
-    .section-title h3{margin:0;color:var(--accent);font-size:1.25rem}
-    .section-sub{color:var(--muted);font-size:0.95rem;margin-left:auto}
-
-    /* specialised subsection cards keep same rec-card layout */
-    .rec-subgroup{margin-top:14px}
-
-    /* dark toggle - top right floating in header */
-    .top-controls{display:flex;align-items:center;gap:12px}
-    .dark-toggle{
-      display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;background:var(--card)
-    }
-    body.dark .dark-toggle{border-color:rgba(255,255,255,0.06)}
-    .dark-toggle .dot{width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.12)}
-
-    /* scroll-to-top */
-    .scroll-top{position:fixed;right:18px;bottom:24px;width:46px;height:46px;border-radius:10px;background:var(--accent);color:#fff;border:none;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.12)}
-    .scroll-top.show{display:flex}
-
-    /* responsiveness */
-    @media(max-width:900px){
-      .hero{flex-direction:column;align-items:flex-start}
-      .hero-right img{width:120px;height:100px}
-      .hero-left{width:100%}
-    }
-
-  </style>
-</head>
-<body>
-  <!-- header -->
-  <header class="site-header">
-    <div class="header-inner">
-      <div style="display:flex;align-items:center;gap:18px">
-        <div class="brand">FitLife</div>
-        <nav class="main-nav" aria-label="Main">
-          <a href="index.html">Home</a>
-          <a href="index.html#heartSection">Heart</a>
-        </nav>
-      </div>
-
-        <!-- dark toggle -->
-        <button class="dark-toggle" id="darkToggle" aria-pressed="false" title="Toggle dark mode">
-          <span class="dot" aria-hidden="true"></span>
-          <span style="font-weight:600;color:var(--muted)">Dark</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="container" id="main">
-    <!-- hero -->
-    <section class="hero" aria-labelledby="pageTitle">
-      <div class="hero-left">
-        <h1 id="pageTitle">Yoga Recommendations</h1>
-        <p class="lead">Practical poses, breathing techniques and specialised yoga — carefully curated to support health and wellbeing.</p>
-      </div>
-      <div class="hero-right">
-        <img src="icon/yoga-hero.jpeg" alt="yoga hero illustration">
-      </div>
-    </section>
-
-    <!-- BASIC YOGA POSES -->
-    <section id="yogaBasic" class="yoga-section">
-      <div class="section-title">
-        <h3>Basic Yoga Poses</h3>
-        <div class="section-sub">12 essential poses — image, name & procedure</div>
-      </div>
-
-      <div class="rec-grid" id="basicGrid">
-        <!-- 12 poses (image, name, procedure) -->
-        <article class="rec-card fade-in">
           <img src="icon/yoga1.jpeg" alt="Tadasana">
           <h4>Tadasana (Mountain Pose)</h4>
-          <p class="exercise-proc">Stand tall with feet together, distribute weight evenly. Inhale, raise arms overhead with palms facing. Hold 20–30s; breathe calmly. Improves posture & balance.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+          <p class="exercise-proc"> procedure:- Stand tall with feet together, distribute weight evenly. Inhale, raise arms overhead with palms facing. Hold 20–30s; breathe calmly. Improves posture & balance.</p>
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga2.jpeg" alt="Vrikshasana">
           <h4>Vrikshasana (Tree Pose)</h4>
           <p class="exercise-proc">Shift weight to one foot, place sole on inner thigh, hands overhead. Hold 20–40s. Builds balance and focus.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga3.jpeg" alt="Bhujangasana">
           <h4>Bhujangasana (Cobra Pose)</h4>
           <p class="exercise-proc">Lie prone, place hands under shoulders and lift chest on inhale. Keep pelvis grounded. Hold 15–20s. Strengthens back and opens chest.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga4.jpeg" alt="Adho Mukha Svanasana">
           <h4>Adho Mukha Svanasana (Downward Dog)</h4>
           <p class="exercise-proc">From hands & knees, lift hips to create an inverted V. Press heels down, lengthen spine. Hold 20–40s. Stretches hamstrings & shoulders.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga5.jpeg" alt="Trikonasana">
           <h4>Trikonasana (Triangle Pose)</h4>
           <p class="exercise-proc">Stand wide, extend arms, tilt over front leg and reach hand down; open chest. Hold 20–30s each side. Improves lateral flexibility.</p>
-        </article>
-
-        <article class="rec-card fade-in">
-          <img src="icon/yoga6.jpeg" alt="Paschimottanasana">
+        </div>
+        <div class="rec-card">
+           <img src="icon/yoga6.jpeg" alt="Paschimottanasana">
           <h4>Paschimottanasana (Seated Forward Bend)</h4>
           <p class="exercise-proc">Sit, extend legs, hinge from hips and reach for toes. Hold 30s. Calms mind and stretches spine & hamstrings.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga7.jpeg" alt="Setu Bandhasana">
           <h4>Setu Bandhasana (Bridge Pose)</h4>
           <p class="exercise-proc">Lie on back, bend knees, lift hips while pressing shoulders. Hold 20–30s. Strengthens back & opens chest.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga8.jpeg" alt="Dhanurasana">
           <h4>Dhanurasana (Bow Pose)</h4>
           <p class="exercise-proc">Lie on stomach, hold ankles and lift chest & legs. Hold 12–20s. Deep back opener; increases spinal flexibility.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga9.jpeg" alt="Balasana">
           <h4>Balasana (Child's Pose)</h4>
           <p class="exercise-proc">Kneel and fold forward, rest forehead on mat, breathe naturally. Hold 30–60s. Great resting pose for relaxation.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga10.jpeg" alt="Surya Namaskar">
           <h4>Surya Namaskar (Sun Salutation)</h4>
           <p class="exercise-proc">A sequence of 12 poses performed in flow; repeat 3–6 rounds. Energizes body and improves overall mobility.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga11.jpeg" alt="Vajrasana">
           <h4>Vajrasana (Thunderbolt Pose)</h4>
           <p class="exercise-proc">Kneel and sit on heels with spine straight. Practice 5–10 minutes after meals to aid digestion and grounding.</p>
-        </article>
-
-        <article class="rec-card fade-in">
+        </div>
+        <div class="rec-card">
           <img src="icon/yoga12.jpeg" alt="Kapotasana">
           <h4>Ustrasana / Kapotasana (Camel Pose)</h4>
           <p class="exercise-proc">Kneel, arch back, and reach heels. Hold 12–20s. Opens chest and improves thoracic flexibility.</p>
-        </article>
-      </div>
+        </div>
+        </div>
     </section>
 
-    <!-- yoga and importance -->
-    <section class="yoga-info" aria-labelledby="yogaImportance">
-      <h3 id="yogaImportance">"Yoga" and Its Importance</h3>
-      <p><strong>Origin:</strong> Yoga originated in ancient India (Vedic period). The word “Yoga” comes from Sanskrit root <em>yuj</em> — to join or unite: body, breath and mind. Early classical texts such as the Yoga Sutras of Patanjali codified the philosophy and practices, which included ethical guidelines, breathwork (pranayama), physical postures (asanas), and meditation (dhyana).</p>
-      <p><strong>Why it matters:</strong> Yoga is a holistic science — it supports flexibility, strength, balance and respiratory health while also reducing stress and improving mental clarity. For modern lifestyles, yoga acts both as preventive care (daily mobility, stress reduction) and therapeutic support (rehabilitation, breathing disorders).</p>
-      <p><strong>Benefits:</strong> Improved posture; better circulation; reduced anxiety & improved sleep; stronger core and back; enhanced digestion and metabolic health; increased lung capacity with pranayama; and improved concentration and mood regulation.</p>
-    </section>
+    <!-- specialised yoga for medical conditions -->
 
     <!-- SPECIALISED YOGA FOR CONDITIONS -->
     <section id="yogaSpecial">
-      <div class="section-title">
+      <div class="section">
         <h3>Specialised Yoga for Health Conditions</h3>
         <div class="section-sub">Pose + Image + Procedure for target conditions</div>
       </div>
@@ -682,51 +574,30 @@
         <strong>Disclaimer:</strong> This page is for educational purposes only. Consult a qualified instructor or healthcare professional before starting new practices.
       </p>
     </section>
-
     <button onclick="history.back()" class="back-btn">← Back</button>
   </main>
 
-  <footer class="container" style="text-align:center;padding:28px 0;color:var(--muted);">
-    © 2025 FitLife — Your personal health companion
+  <footer>
+    <p>© 2025 FitLife | For educational purposes only</p>
   </footer>
 
-  <!-- scroll-to-top -->
-  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">↑</button>
+  <button class="scroll-top" id="scrollTop">↑</button>
 
   <script>
-    // DARK MODE (persistent)
-    (function(){
-      const root = document.documentElement;
-      const body = document.body;
-      const btn = document.getElementById('darkToggle');
-      const saved = localStorage.getItem('fitlife_dark');
-      if(saved === 'on') body.classList.add('dark');
-
-      btn.addEventListener('click', () => {
-        const on = body.classList.toggle('dark');
-        localStorage.setItem('fitlife_dark', on ? 'on' : 'off');
-        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
-    })();          
-
-    // SCROLL TO TOP
-    const st = document.getElementById('scrollTopBtn');
-    window.addEventListener('scroll', () => {
-      st.classList.toggle('show', window.scrollY > 350);
+    // Dark Mode Toggle Logic
+    const themeBtn = document.getElementById('themeBtn');
+    const body = document.body;
+    themeBtn.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      themeBtn.textContent = body.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
     });
-    st.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
-    // IntersectionObserver reveal (fade-in)
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          e.target.classList.add('show');
-          io.unobserve(e.target);
-        }
-      });
-    }, {threshold: 0.12});
-
-    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+    // Scroll to Top Button Logic
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('show', window.scrollY > 300);
+    });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 </body>
 </html>

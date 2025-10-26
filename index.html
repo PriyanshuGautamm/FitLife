@@ -131,6 +131,7 @@
   <h3>Check Your Heart</h3>
   <div class="cards-row">
     <div class="mini-card">
+      
       <h4>Know Your Heart</h4>
       <p>A healthy heart beats regularly, pumps blood efficiently, and keeps you energetic. Learn how to check your heart health.</p>
       <p>Common diseases: Coronary artery disease, Heart attack, Arrhythmia, Hypertension.</p>
@@ -152,7 +153,7 @@
       <p>Benefits: Flexibility, stress reduction, improved posture, increased energy.</p>
       <button class="btn-primary" onclick="window.location.href='yoga.html'">Explore Yoga</button>
     </div>
-    <img src="icon/yoga5.jpeg" alt="yoga" class="quick-img desktop-only">
+    <img src="icon/yoga3.jpeg" alt="yoga" class="quick-img desktop-only+">
   </div>
 </section>
 
@@ -236,11 +237,39 @@
   </footer>
 
   <button class="scroll-top" id="scrollTop">↑</button>
+ <!-- ======== Fii AI Assistant Button & Chat Window ======== -->
+<div class="fii-ai-btn" id="fiiAiBtn">Fii AI</div>
+
+<div class="fii-ai-chatbox" id="fiiAiChat">
+  <div class="fii-ai-header">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="openHistory" class="history-btn" title="History">🕘</button>
+      <h2 style="margin:0">🤖 Fii AI</h2>
+    </div>
+    <button class="close-ai" id="closeFiiAi">&times;</button>
+  </div>
+
+  <div class="fii-ai-body" id="fiiChatBody">
+    <div class="ai-message">Hi 👋 I'm Fii AI! How can I help you?</div>
+  </div>
+
+  <div class="fii-ai-footer">
+    <button class="add-btn">+</button>
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button class="send-btn" id="sendMsg">➤</button>
+  </div>
+
+  <!-- Slide-in History Panel -->
+  <div class="fii-history-panel" id="fiiHistoryPanel">
+    <div class="history-header">
+      <h4>🕘 Chat History</h4>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<div id="historyOverlay"></div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-

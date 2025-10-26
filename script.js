@@ -146,3 +146,146 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollBtn.classList.toggle('show', window.scrollY > 300);
     });
     scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+
+
+    // ======== Fii AI Assistant Logic ========
+const FII_BACKEND = "http://localhost:5000";
+
+const fiiBtn = document.getElementById("fiiAiBtn");
+const fiiChat = document.getElementById("fiiAiChat");
+const closeFiiAi = document.getElementById("closeFiiAi");
+const sendMsg = document.getElementById("sendMsg");
+const userInput = document.getElementById("userInput");
+const fiiChatBody = document.getElementById("fiiChatBody");
+const openHistoryBtn = document.getElementById("openHistory");
+const historyPanel = document.getElementById("fiiHistoryPanel");
+const historyOverlay = document.getElementById("historyOverlay");
+const historyList = document.getElementById("historyList");
+
+// Each session is saved separately
+const HISTORY_KEY = "fii_sessions_v1";
+let sessions = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+let currentSession = [];
+
+// --------- Utility Functions ----------
+function saveSessions() {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(sessions));
+}
+
+function renderChat(session = currentSession) {
+  fiiChatBody.innerHTML = "";
+  if (!session.length) {
+    fiiChatBody.innerHTML = `<div class="ai-message">Hi 👋 I'm Fii AI! How can I help you today?</div>`;
+  } else {
+    session.forEach(msg => {
+      const div = document.createElement("div");
+      div.className = msg.role === "assistant" ? "ai-message" : "user-message";
+      div.textContent = msg.content;
+      fiiChatBody.appendChild(div);
+    });
+  }
+  fiiChatBody.scrollTop = fiiChatBody.scrollHeight;
+}
+
+// --------- Chat Open / Close ----------
+fiiBtn.addEventListener("click", () => {
+  fiiChat.style.display = "flex";
+  renderChat();
+});
+
+closeFiiAi.addEventListener("click", () => {
+  fiiChat.style.display = "none";
+});
+
+// --------- History Panel Logic ----------
+openHistoryBtn.addEventListener("click", () => {
+  fillHistoryList();
+  historyPanel.classList.add("show");
+  historyOverlay.style.display = "block";
+});
+
+function fillHistoryList() {
+  historyList.innerHTML = "";
+  if (sessions.length === 0) {
+    historyList.innerHTML = "<div>No previous chats yet.</div>";
+    return;
+  }
+  sessions.slice().reverse().forEach((session, index) => {
+    const summary = session
+      .filter(m => m.role === "user")[0]?.content.slice(0, 40) || "New Chat";
+    const div = document.createElement("div");
+    div.textContent = summary + "...";
+    div.addEventListener("click", () => {
+      currentSession = session;
+      renderChat();
+      closeHistoryPanel();
+    });
+    historyList.appendChild(div);
+  });
+}
+
+function closeHistoryPanel() {
+  historyPanel.classList.remove("show");
+  historyOverlay.style.display = "none";
+}
+
+historyOverlay.addEventListener("click", closeHistoryPanel);
+
+// --------- Send Message ----------
+async function sendFiiMessage() {
+  const text = userInput.value.trim();
+  if (!text) return;
+
+  currentSession.push({ role: "user", content: text });
+  renderChat();
+
+  userInput.value = "";
+
+  const typing = document.createElement("div");
+  typing.className = "ai-message";
+  typing.textContent = "Fii AI is typing...";
+  fiiChatBody.appendChild(typing);
+  fiiChatBody.scrollTop = fiiChatBody.scrollHeight;
+
+  try {
+    const res = await fetch(`${FII_BACKEND}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+    const data = await res.json();
+    typing.remove();
+
+    const reply = data.reply || "Sorry, I couldn't generate a response.";
+    currentSession.push({ role: "assistant", content: reply });
+    renderChat();
+  } catch (e) {
+    typing.remove();
+    const errMsg = document.createElement("div");
+    errMsg.className = "ai-message";
+    errMsg.textContent = "⚠️ Network error. Please try again.";
+    fiiChatBody.appendChild(errMsg);
+  }
+}
+
+// --------- Wire events ----------
+sendMsg.addEventListener("click", sendFiiMessage);
+userInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendFiiMessage();
+  }
+});
+
+// --------- On close, save session to history ----------
+window.addEventListener("beforeunload", () => {
+  if (currentSession.length > 0) {
+    sessions.push(currentSession);
+    saveSessions();
+  }
+});
+
+// --------- On load, start fresh session ---------
+currentSession = [];
+renderChat();

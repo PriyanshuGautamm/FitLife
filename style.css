@@ -579,7 +579,7 @@ header {
 .fii-ai-btn {
   position: fixed;
   bottom: 25px;
-  right: 50px;
+  right: 30px;
   background: linear-gradient(45deg, #ff0055, #ffae00, #00c6ff, #a800ff);
   background-size: 300% 300%;
   animation: rainbowShift 5s ease infinite;
@@ -610,7 +610,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  right: 90px; /* Keeps space from move-to-top button */
+  right: 60px; /* Keeps space from move-to-top button */
 }
 
 /* Chat Window */
@@ -711,4 +711,5 @@ header {
   font-size: 0.85rem;
 }
 .history-btn:hover { background: rgba(255,255,255,0.2); }
+
 

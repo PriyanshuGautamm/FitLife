@@ -149,8 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // ======== Fii AI Assistant Logic ========
-const FII_BACKEND = "http://localhost:5000";
+   // ===== Fii AI Assistant Logic (replace old code block) =====
+
+const FII_BACKEND = "http://localhost:5000"; // change to your deployed backend URL when live
 
 const fiiBtn = document.getElementById("fiiAiBtn");
 const fiiChat = document.getElementById("fiiAiChat");
@@ -159,117 +160,149 @@ const sendMsg = document.getElementById("sendMsg");
 const userInput = document.getElementById("userInput");
 const fiiChatBody = document.getElementById("fiiChatBody");
 const openHistoryBtn = document.getElementById("openHistory");
-const historyPanel = document.getElementById("fiiHistoryPanel");
-const historyOverlay = document.getElementById("historyOverlay");
-const historyList = document.getElementById("historyList");
 
-// Each session is saved separately
-const HISTORY_KEY = "fii_sessions_v1";
-let sessions = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
-let currentSession = [];
+// Local storage key
+const STORAGE_KEY = "fii_history_v1";
 
-// --------- Utility Functions ----------
-function saveSessions() {
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(sessions));
-}
+// Load history from localStorage (array of {role, content})
+let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 
-function renderChat(session = currentSession) {
+// Helper: render the chat body from history
+function renderChatBody() {
   fiiChatBody.innerHTML = "";
-  if (!session.length) {
-    fiiChatBody.innerHTML = `<div class="ai-message">Hi 👋 I'm Fii AI! How can I help you today?</div>`;
-  } else {
-    session.forEach(msg => {
-      const div = document.createElement("div");
-      div.className = msg.role === "assistant" ? "ai-message" : "user-message";
-      div.textContent = msg.content;
-      fiiChatBody.appendChild(div);
-    });
+  if (history.length === 0) {
+    const welcome = document.createElement("div");
+    welcome.className = "ai-message";
+    welcome.textContent = "Hi 👋 I'm Fii AI! How can I help you today?";
+    fiiChatBody.appendChild(welcome);
+    return;
+  }
+  for (const m of history) {
+    const div = document.createElement("div");
+    div.textContent = m.content;
+    div.className = m.role === "assistant" ? "ai-message" : "user-message";
+    fiiChatBody.appendChild(div);
   }
   fiiChatBody.scrollTop = fiiChatBody.scrollHeight;
 }
 
-// --------- Chat Open / Close ----------
+// Save history helper
+function saveHistory() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
+
+// Open chat
 fiiBtn.addEventListener("click", () => {
   fiiChat.style.display = "flex";
-  renderChat();
+  renderChatBody();
 });
 
+// Close chat
 closeFiiAi.addEventListener("click", () => {
   fiiChat.style.display = "none";
 });
 
-// --------- History Panel Logic ----------
-openHistoryBtn.addEventListener("click", () => {
-  fillHistoryList();
-  historyPanel.classList.add("show");
-  historyOverlay.style.display = "block";
+// Scroll effect → button changes to circle
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 200) {
+    fiiBtn.classList.add("scrolled");
+    fiiBtn.textContent = "Fii";
+  } else {
+    fiiBtn.classList.remove("scrolled");
+    fiiBtn.textContent = "Fii AI";
+  }
 });
 
-function fillHistoryList() {
-  historyList.innerHTML = "";
-  if (sessions.length === 0) {
-    historyList.innerHTML = "<div>No previous chats yet.</div>";
-    return;
-  }
-  sessions.slice().reverse().forEach((session, index) => {
-    const summary = session
-      .filter(m => m.role === "user")[0]?.content.slice(0, 40) || "New Chat";
-    const div = document.createElement("div");
-    div.textContent = summary + "...";
-    div.addEventListener("click", () => {
-      currentSession = session;
-      renderChat();
-      closeHistoryPanel();
+// Open History - toggles a simple modal/panel inside the chat top
+openHistoryBtn && openHistoryBtn.addEventListener("click", () => {
+  // We'll reuse the chat body as a simple history list view
+  // For a nicer UI you can implement a separate panel instead
+  const historyPanel = document.createElement("div");
+  historyPanel.style.position = "absolute";
+  historyPanel.style.left = "12px";
+  historyPanel.style.top = "56px";
+  historyPanel.style.width = "260px";
+  historyPanel.style.maxHeight = "320px";
+  historyPanel.style.overflow = "auto";
+  historyPanel.style.background = "#fff";
+  historyPanel.style.border = "1px solid #eee";
+  historyPanel.style.boxShadow = "0 6px 18px rgba(0,0,0,0.12)";
+  historyPanel.style.padding = "8px";
+  historyPanel.style.zIndex = 1100;
+
+  historyPanel.innerHTML = `<strong>Conversation history</strong><button id="closeHistoryPanel" style="float:right">Close</button><div style="clear:both"></div>`;
+  if (history.length === 0) {
+    const p = document.createElement("div");
+    p.textContent = "No history yet.";
+    p.style.marginTop = "8px";
+    historyPanel.appendChild(p);
+  } else {
+    history.slice().reverse().forEach((m, i) => {
+      const r = document.createElement("div");
+      r.style.padding = "6px";
+      r.style.borderBottom = "1px solid #f1f1f1";
+      r.innerHTML = `<small style="color:#888">${m.role}</small><div>${m.content}</div>`;
+      historyPanel.appendChild(r);
     });
-    historyList.appendChild(div);
+  }
+
+  document.querySelector(".fii-ai-chatbox").appendChild(historyPanel);
+
+  document.getElementById("closeHistoryPanel").addEventListener("click", () => {
+    historyPanel.remove();
   });
-}
+});
 
-function closeHistoryPanel() {
-  historyPanel.classList.remove("show");
-  historyOverlay.style.display = "none";
-}
-
-historyOverlay.addEventListener("click", closeHistoryPanel);
-
-// --------- Send Message ----------
+// Send message handler - sends to backend and updates history
 async function sendFiiMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
-  currentSession.push({ role: "user", content: text });
-  renderChat();
+  // push user message to history and render immediately
+  history.push({ role: "user", content: text });
+  saveHistory();
+  renderChatBody();
 
   userInput.value = "";
+  userInput.focus();
 
-  const typing = document.createElement("div");
-  typing.className = "ai-message";
-  typing.textContent = "Fii AI is typing...";
-  fiiChatBody.appendChild(typing);
+  // show temporary typing indicator
+  const typingEl = document.createElement("div");
+  typingEl.className = "ai-message";
+  typingEl.textContent = "Fii AI is typing...";
+  fiiChatBody.appendChild(typingEl);
   fiiChatBody.scrollTop = fiiChatBody.scrollHeight;
 
   try {
     const res = await fetch(`${FII_BACKEND}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
+      body: JSON.stringify({
+        message: text,
+        history // send existing history for context
+      })
     });
+
     const data = await res.json();
-    typing.remove();
+    // remove typing
+    typingEl.remove();
 
     const reply = data.reply || "Sorry, I couldn't generate a response.";
-    currentSession.push({ role: "assistant", content: reply });
-    renderChat();
-  } catch (e) {
-    typing.remove();
-    const errMsg = document.createElement("div");
-    errMsg.className = "ai-message";
-    errMsg.textContent = "⚠️ Network error. Please try again.";
-    fiiChatBody.appendChild(errMsg);
+    // append assistant message to history and save
+    history.push({ role: "assistant", content: reply });
+    saveHistory();
+    renderChatBody();
+  } catch (err) {
+    console.error("Fii AI request error:", err);
+    typingEl.remove();
+    const errDiv = document.createElement("div");
+    errDiv.className = "ai-message";
+    errDiv.textContent = "Network error. Please try again.";
+    fiiChatBody.appendChild(errDiv);
   }
 }
 
-// --------- Wire events ----------
+// Wire send button and Enter key
 sendMsg.addEventListener("click", sendFiiMessage);
 userInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -278,14 +311,5 @@ userInput.addEventListener("keydown", (e) => {
   }
 });
 
-// --------- On close, save session to history ----------
-window.addEventListener("beforeunload", () => {
-  if (currentSession.length > 0) {
-    sessions.push(currentSession);
-    saveSessions();
-  }
-});
-
-// --------- On load, start fresh session ---------
-currentSession = [];
-renderChat();
+// initial render
+renderChatBody();

@@ -237,20 +237,19 @@
   </footer>
 
   <button class="scroll-top" id="scrollTop">↑</button>
- <!-- ======== Fii AI Assistant Button & Chat Window ======== -->
+<!-- ======== Fii AI Assistant Button & Chat Window ======== -->
 <div class="fii-ai-btn" id="fiiAiBtn">Fii AI</div>
 
 <div class="fii-ai-chatbox" id="fiiAiChat">
   <div class="fii-ai-header">
     <div style="display:flex;align-items:center;gap:8px;">
-      <button id="openHistory" class="history-btn" title="History">🕘</button>
+      <button id="openHistory" class="history-btn" title="History">History</button>
       <h2 style="margin:0">🤖 Fii AI</h2>
     </div>
     <button class="close-ai" id="closeFiiAi">&times;</button>
   </div>
-
   <div class="fii-ai-body" id="fiiChatBody">
-    <div class="ai-message">Hi 👋 I'm Fii AI! How can I help you?</div>
+    <div class="ai-message">Hi 👋 I'm Fii AI! How can I help you today?</div>
   </div>
 
   <div class="fii-ai-footer">
@@ -258,17 +257,7 @@
     <input type="text" id="userInput" placeholder="Type your message..." />
     <button class="send-btn" id="sendMsg">➤</button>
   </div>
-
-  <!-- Slide-in History Panel -->
-  <div class="fii-history-panel" id="fiiHistoryPanel">
-    <div class="history-header">
-      <h4>🕘 Chat History</h4>
-    </div>
-    <div class="history-list" id="historyList"></div>
-  </div>
 </div>
-
-<div id="historyOverlay"></div>
 
   <script src="script.js"></script>
 </body>

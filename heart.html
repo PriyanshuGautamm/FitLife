@@ -88,6 +88,27 @@
       color: var(--accent);
     }
 
+    .intro-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 48px 36px;
+  background: linear-gradient(135deg, #fee4e7 0%, #fd8aa9 40%, #fc4d76 100%);
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  margin: 40px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.intro-hero:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+body.dark .intro-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 40%, #3b3b3b 100%);
+}
+
     .section {
       background: var(--card-light);
       border-radius: 12px;
@@ -207,7 +228,13 @@
   </header>
 
   <main class="container">
-    <h2>Heart Health & Awareness</h2>
+    <section class="intro-hero">
+        <div class="hero-left">
+        <h1 id="pageTitle">Heart Health & Awareness</h1>
+        <p class="lead">Understanding about the Heart, heart diseases, differentian between different heart diseases, its sympyoms and precautions.</p>
+      </div>
+    </section>
+
     <section class="section">
       <h3>About Human Heart</h3>
       <p>
@@ -298,4 +325,5 @@
     scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 </body>
+
 </html>

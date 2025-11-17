@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // scroll button
   const scrollBtn = document.getElementById('scrollTop');
     window.addEventListener('scroll', () => {
-      scrollBtn.classList.toggle('show', window.scrollY > 300);
+      scrollBtn.classList.toggle('show', window.scrollY > 200);
     });
     scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
@@ -313,3 +313,4 @@ userInput.addEventListener("keydown", (e) => {
 
 // initial render
 renderChatBody();
+

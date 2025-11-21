@@ -1,432 +1,762 @@
-<!-- <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FitLife — Recommendations</title>
-  <link rel="stylesheet" href="recommendation.css" />
-  <style>
-    /* small additions for rec page */
-    .rec-hero{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-bottom:10px}
-    .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-    .rec-card{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(3,10,18,0.04)}
-    .exercise-proc{margin-top:8px;color:var(--muted);font-size:0.95rem}
-    .back-btn{margin-top:18px}
-  </style>
-</head>
-<body>
-  <header class="site-header"> 
-    <div class="container header-inner">
-      <div class="brand">FitLife</div>
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="index.html#calculator">Calculator</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <section id="recTop" class="rec-hero">
-      <div>
-        <h2 id="recTitle">Your Recommendations</h2>
-        <p id="recSubtitle" class="lead">Personalised suggestions based on your BMI</p>
-        <div><strong id="displayBMI">BMI: —</strong> &nbsp; <span id="displayCat">Category: —</span></div>
-      </div>
-      <div>
-        <button onclick="history.back()" class="btn-ghost back-btn">Back</button>
-      </div>
-    </section>
-
-    <section id="dietSection">
-      <h3>Diet Recommendations</h3>
-      <div id="dietGrid" class="rec-grid"></div>
-    </section>
-
-    <section id="exerciseSection" style="margin-top:22px">
-      <h3>Exercise Recommendations</h3>
-      <div id="exerciseGrid" class="rec-grid"></div>
-    </section>
-  </main>
-
-  <footer class="site-footer container">
-    <div>For educational purposes only. Consult a professional for medical advice.</div>
-    <div class="credits">Capstone Project — FitLife</div>
-  </footer>
-
-  <script>
-    // simple hard-coded suggestions per category
-    const data = {
-      Underweight: {
-        diet: [
-          {title:'Calorie-rich meals',detail:'Add healthy calorie sources: Nuts, Dry fruits, Whole Milk, Smoothies, Avocardos, Fatty Fish.'},
-          {title:'Protein focus',detail:'Include lean meats, eggs, legumes to support muscle gain.'},
-          {title:'Frequent meals',detail:'Eat 5–6 smaller meals across the day.'},
-          {title:'Complex carbs',detail:'Oats, brown rice, potatoes for caloric support.'},
-          {title:'Healthy snacks',detail:'Peanut butter, yogurt, bananas between meals.'},
-        ],
-        exercise: [
-          {title:'Strength Training',detail:'3×/week, focus on compound lifts (squats, deadlifts, bench). Procedure: 3 sets, 6–10 reps. Progressive overload.'},
-          {title:'Compound Exercises',detail:'Squats, deadlifts, rows. Procedure: focus on form and increasing weight gradually.'},
-          {title:'Rest & Recovery',detail:'Allow 48–72 hours between heavy sessions. Sleep 7–9 hrs.'},
-          {title:'Low-intensity cardio',detail:'Short walks to maintain appetite; avoid long cardio that burns many calories.'},
-          {title:'Core strengthening',detail:'Planks and transverse core work: 3 sets of 30–45s.'},
-        ]
-      },
-      Normal: {
-        diet: [
-          {title:'Balanced macro split',detail:'Include carbs, protein, fats in every meal.'},
-          {title:'Portion control',detail:'Maintain calorie intake for weight stability.'},
-          {title:'Whole foods',detail:'Fruits, vegetables, legumes and whole grains.'},
-          {title:'Protein with every meal',detail:'Helps maintain muscle mass: 20–30g per meal.'},
-          {title:'Hydration',detail:'2–3L water daily depending on activity.'},
-        ],
-        exercise: [
-          {title:'Mixed Training',detail:'Combine cardio+strength 3–5×/week. Procedure: 30–45 min sessions.'},
-          {title:'HIIT (optional)',detail:'10–20 min HIIT once/twice weekly. Procedure: 20s hard / 40s rest, 8–12 rounds.'},
-          {title:'Mobility work',detail:'Daily mobility & stretching: 10–15 min.'},
-          {title:'Resistance sessions',detail:'2–3 strength sessions: 3 sets of 8–12 reps.'},
-          {title:'Active recovery',detail:'Light yoga or walking on rest days.'},
-        ]
-      },
-      Overweight: {
-        diet: [
-          {title:'Calorie deficit',detail:'Reduce daily calories moderately (250–500 kcal deficit).'},
-          {title:'Protein rich diet',detail:'Help preserve muscle while losing fat.'},
-          {title:'Reduce processed foods',detail:'Limit sugary drinks and fried foods.'},
-          {title:'Increase vegetables',detail:'High volume, low calorie foods to fill you up.'},
-          {title:'Controlled portions',detail:'Measure and plan meals to avoid overeating.'},
-        ],
-        exercise: [
-          {title:'Cardio workouts',detail:'30–45 min moderate cardio (brisk walk, cycling). Procedure: 5×/week.'},
-          {title:'Strength training',detail:'2–3×/week to preserve muscle: compound lifts, 3 sets of 8–12 reps.'},
-          {title:'Interval training',detail:'HIIT 1–2×/week if suitable: 10–20 min.'},
-          {title:'Daily steps goal',detail:'Aim for 7–10k steps/day.'},
-          {title:'Flexibility & core',detail:'Stretching & core work 2–3×/week.'},
-        ]
-      },
-      Obese: {
-        diet: [
-          {title:'Medical guidance',detail:'Seek a clinician/dietitian before starting aggressive diet.'},
-          {title:'Structured low-calorie plan',detail:'Supervised calorie reduction with nutrient adequacy.'},
-          {title:'High protein, low processed carbs',detail:'Helps satiety and preserves lean mass.'},
-          {title:'Vegetable heavy meals',detail:'High fiber, low energy density foods.'},
-          {title:'Track intake',detail:'Use a food diary or app to monitor calories.'},
-        ],
-        exercise: [
-          {title:'Low-impact cardio',detail:'Swimming, cycling, brisk walking. Procedure: 20–40 min, build gradually.'},
-          {title:'Beginner strength',detail:'Bodyweight and machine-based strength 2×/week.'},
-          {title:'Professional supervision',detail:'If high BMI, exercise with guidance initially.'},
-          {title:'Flexibility & balance',detail:'Daily stretching to reduce injury risk.'},
-          {title:'Gradual progression',detail:'Increase duration/intensity slowly to avoid injury.'},
-        ]
-      }
-    };
-
-    function getQueryParams(){
-      const params = new URLSearchParams(window.location.search);
-      return {
-        bmi: params.get('bmi') || '—',
-        category: params.get('category') || '—'
-      };
-    }
-
-    function render() {
-      const {bmi, category} = getQueryParams();
-      document.getElementById('displayBMI').textContent = `BMI: ${bmi}`;
-      document.getElementById('displayCat').textContent = `Category: ${category}`;
-
-      const dietGrid = document.getElementById('dietGrid');
-      const exerciseGrid = document.getElementById('exerciseGrid');
-
-      const catData = data[category] || data['Normal'];
-
-      // Diet
-      dietGrid.innerHTML = '';
-      catData.diet.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'rec-card';
-        div.innerHTML = `<h4>${item.title}</h4><p class="exercise-proc">${item.detail}</p>`;
-        dietGrid.appendChild(div);
-      });
-
-      // Exercise + procedure
-      exerciseGrid.innerHTML = '';
-      catData.exercise.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'rec-card';
-        div.innerHTML = `<h4>${item.title}</h4><p class="exercise-proc">${item.detail}</p>`;
-        exerciseGrid.appendChild(div);
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', render);
-  </script>
-</body>
-</html> -->
-
-
-
-
-
-
-
-
-
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FitLife — Recommendations</title>
-  <link rel="stylesheet" href="recommendation.css" />
+  <title>FitLife — Clinical Recommendations</title>
+  <meta name="description" content="Clinically-styled personalised diet & exercise recommendations based on BMI. For educational purposes only." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* small additions for rec page */
-    .rec-hero{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-bottom:10px}
-    .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-    .rec-card{background:#fff;padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(3,10,18,0.04)}
-    .exercise-proc{margin-top:8px;color:var(--muted);font-size:0.95rem}
-    .back-btn{margin-top:18px}
+    :root{
+      /* New professional blue theme */
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --primary:#309ae0;   /* main brand blue */
+      --prrimary:#59ade4;
+      --accent:#0bd612;    /* accent/gradient */
+      --muted:#556;
+      --text:#0f1720;
+      --radius:12px;
+      --glass: rgba(255,255,255,0.75);
+      --success:#118a4b;
+      --danger:#c62828;
+      --dangeer:#c6289c;
+      --whatsapp:#4db655;
+    }
+    [data-theme="dark"]{
+      --bg:#07101a;
+      --card:#0b1722;
+      --primary:#79c6ff;
+      --accent:#4fb3ff;
+      --muted:#9fb2c6;
+      --text:#e6f1f6;
+      --glass: rgba(255,255,255,0.03);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:'Poppins',sans-serif;margin:0;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+
+    /* Header */
+    .site-header{background:var(--card);backdrop-filter: blur(6px);position:sticky;top:0;z-index:120;padding:12px 20px;border-bottom:1px solid rgba(0,0,0,0.06)}
+    .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{font-weight:700;color:var(--primary);font-size:1.35rem;letter-spacing:0.2px}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .main-nav a{margin-right:14px;color:var(--text);text-decoration:none;font-weight:600}
+
+    /* Buttons and interactive styles */
+    .btn{background:var(--prrimary);color:white;padding:8px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;letter-spacing:0.2px;transition:all 160ms ease;display:inline-flex;align-items:center;gap:8px}
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus{outline:3px solid rgba(11,111,176,0.18);outline-offset:3px}
+
+    .btn-ghoost{  background-color: #25D366;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-size: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;}
+    .wa-icon {
+    width: 20px;
+    height: 20px;
+}
+    .btn-ghoost:hover{transform:translateY(-2px);filter:brightness(1.05)}
+    .btn-ghoost:active{transform:translateY(0)}
+    .btn-ghoost:focus{outline:3px solid rgba(11,111,176,0.18);outline-offset:3px}
+    .btn-ghost{background:rgb(228, 225, 228);border:1px solid rgba(11,111,176,0.12);padding:8px 12px;border-radius:10px;color:var(--text);cursor:pointer;transition:all 160ms ease;font-weight:600}
+    .btn-ghost:hover{background:linear-gradient(90deg, rgba(11,111,176,0.06), rgba(11,111,176,0.02));transform:translateY(-2px)}
+    .btn-ghost:focus{outline:3px solid rgba(11,111,176,0.12);outline-offset:3px}
+
+    /* .link-btn{background:transparent;border:none;color:rgb(110, 209, 242);cursor:pointer;padding:6px 8px;font-weight:400} */
+    .link-btn:hover{text-decoration:underline}
+    .link-btn{
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+.link-btn{
+  text-decoration: none;
+  color: #0078ff;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.link-btn:hover {
+  color: #d000ff;
+}
+
+    /* Multi-colour subscription button */
+    .btn-subscribe{
+      background-image: linear-gradient(90deg, #ff8a65 0%, #ffb74d 30%, #81c784 60%, #64b5f6 100%);
+      color:white;
+      padding:8px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:700;box-shadow:0 6px 18px rgba(10,30,60,0.08);transition:transform 150ms ease, box-shadow 150ms ease;
+    }
+    .btn-subscribe:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(10,30,60,0.12)}
+
+    /* Container */
+    .container{max-width:1100px;margin:28px auto;padding:0 18px}
+
+    /* Hero layout */
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start}
+    .profile-card{background:var(--card);padding:20px;border-radius:var(--radius);box-shadow:0 8px 26px rgba(3,10,18,0.06)}
+    .profile-card h2{margin:0;font-size:1.15rem;color:var(--primary)}
+    .meta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .pill{background:var(--glass);padding:8px 10px;border-radius:999px;font-weight:700;color:var(--muted);font-size:0.95rem}
+
+    /* Clinical */
+    .clinical{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:0 8px 24px rgba(3,10,18,0.04)}
+    .clinical h3{margin-top:0;color:var(--primary);font-size:1.05rem}
+    .clinical .note{background:linear-gradient(180deg, rgba(11,111,176,0.04), transparent);padding:12px;border-radius:10px;margin-bottom:12px;border-left:4px solid var(--accent);font-size:0.95rem}
+
+    /* Rec cards */
+    .rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:12px}
+    .rec-card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(3,10,18,0.04)}
+    .rec-card h4{margin:0 0 8px 0;color:var(--primary);font-size:1rem}
+    .rec-card p{margin:0;color:var(--muted);font-size:0.95rem}
+    .example-list{margin-top:10px;padding-left:18px}
+    .example-list li{margin:6px 0;padding:8px;background:var(--glass);border-radius:8px}
+
+    /* doctor footer actions */
+    .plan-actions{display:flex;gap:10px;margin-top:14px}
+    .follow-up{font-size:0.95rem;color:var(--muted)}
+
+    /* locked clinician card */
+    .locked-overlay{position:relative;border-radius:12px;padding:16px;background:linear-gradient(180deg, rgba(250,250,250,0.9), rgba(250,250,250,0.85));text-align:center}
+    .locked-overlay .lock-box{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .lock-badge{font-size:1.6rem;background:linear-gradient(90deg,#fff,#f3f3f3);padding:8px;border-radius:50%;box-shadow:0 8px 22px rgba(0,0,0,0.06)}
+    .sub-note{color:var(--muted);font-size:0.95rem}
+
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(3,10,18,0.45);display:flex;align-items:center;justify-content:center;z-index:400;backdrop-filter:blur(3px)}
+    .modal{width:420px;max-width:92%;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 20px 60px rgba(3,10,18,0.3)}
+    .modal h4{margin:0 0 8px 0;color:var(--primary)}
+    .modal p{color:var(--muted);margin:0 0 12px 0}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+
+    /* scroll to top */
+    .scroll-top{position:fixed;right:18px;bottom:18px;background:var(--dangeer);color:white;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(2, 48, 12, 0.18);cursor:pointer;z-index:200}
+    .scroll-top[hidden]{display:none}
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .divider{height:1px;background:linear-gradient(90deg, rgba(0,0,0,0.04), transparent);margin:14px 0;border-radius:4px}
+
+    .risk-low { background:#2e7d32 !important; }
+.risk-moderate { background:#ef6c00 !important; }
+.risk-high { background:#c62828 !important; }
+
+    /* responsive */
+    @media (max-width:980px){.hero{grid-template-columns:1fr;}.header-inner{gap:8px}.nav-actions{flex-wrap:wrap}}
+    @media (max-width:560px){.pill{font-size:0.85rem}}
+    @media (max-width: 768px) {
+    .summary-container { 
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .summary-box, 
+    .targets-box, 
+    .premium-box {
+        width: 100%;
+        margin: 0;
+    }
+
+    .nav-right, .nav-left {
+        gap: 8px;
+    }
+}
+
+    /* accessible */
+    button:focus, a:focus{outline-offset:3px}
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <div class="brand">FitLife</div>
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="index.html#calculator">Calculator</a>
-      </nav>
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="brand">FitLife</div>
+      </div>
+
+      <div class="nav-actions" role="navigation" aria-label="Top actions">
+        <!-- Home & Calculator moved to right side before dark button as requested -->
+        <a class="link-btn" href="index.html" title="Home" aria-label="Home">Home</a>
+        <a class="link-btn" href="index.html#calculator" title="Calculator" aria-label="Calculator">Calculator</a>
+
+        <button id="darkToggle" class="btn-ghost" aria-pressed="false" title="Toggle dark mode">🌙 Dark</button>
+        <button id="printBtn" class="btn-ghost" title="Print or save as PDF">🖨️ Print</button>
+
+        <!-- Subscription button sits between Print and Back -->
+        <button id="subscribeBtn" class="btn-subscribe" title="Subscribe for premium features">✨ Subscribe</button>
+
+        <button id="backBtn" class="btn" title="Go back">⬅ Back</button>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <section id="recTop" class="rec-hero">
-      <div>
-        <h2 id="recTitle">Your Recommendations</h2>
-        <p id="recSubtitle" class="lead">Personalised suggestions based on your BMI</p>
-        <div><strong id="displayBMI">BMI: —</strong> &nbsp; <span id="displayCat">Category: —</span></div>
-      </div>
-      <div>
-        <button onclick="history.back()" class="btn-ghost back-btn">Back</button>
-      </div>
+  <main class="container" id="content">
+    <div class="hero">
+      <section class="profile-card" aria-labelledby="patientName">
+        <h2 id="patientName">Personalised Clinical Summary</h2>
+        <div class="meta-row" id="metaRow" aria-hidden="false">
+          <div class="pill">BMI: <strong id="displayBMI">—</strong></div>
+          <div class="pill">Category: <strong id="displayCat">—</strong></div>
+          <div class="pill">Age: <strong id="displayAge">—</strong></div>
+          <div class="pill">Sex: <strong id="displaySex">—</strong></div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="clinical" id="clinicalSection" aria-live="polite">
+          <h3>Clinician's interpretation</h3>
+          <div class="note" id="clinicianNote">
+            Primary plan focused on nutritional & activity prescriptions tailored to BMI category. Use this for educational purposes; consult a registered clinician for medical decisions.
+          </div>
+
+          <!-- Removed Diagnostic considerations & Follow-up & monitoring as requested -->
+
+          <div class="plan-actions" role="group" aria-label="Plan actions">
+            <button id="savePlan" class="btn" title="Save plan locally">Save plan</button>
+            <button id="sendWhatsApp" class="btn-ghoost" title="Share via WhatsApp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="wa-icon"> Send to WhatsApp</button> 
+            <button id="downloadJSON" class="btn" title="Download plan JSON">⬇ Download JSON</button>
+          </div>
+        </div>
+        <!-- NEW: Health Risk Assessment Section -->
+<div id="riskAssessment" class="clinical" style="margin-top:18px;">
+  <h3>Health Risk Assessment</h3>
+  <p class="muted">Based on your BMI category, general clinical risks are summarised below.</p>
+
+  <div id="riskBadge" style="
+        margin: 12px 0;
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 50px;
+        font-weight: 700;
+        background: var(--primary);
+        color: white;
+        font-size: 0.95rem;">
+    Loading risk…
+  </div>
+
+  <ul id="riskList" class="example-list" style="margin-top:10px"></ul>
+</div>
+      </section>
+
+      <aside style="position:relative">
+        <div class="profile-card" style="margin-bottom:16px">
+          <h3 style="color: rgb(172, 6, 144);">Personalised Targets</h3>
+          <p class="muted" id="targetSummary" style="color: #b2b715;">Calories & activity targets shown below. These are generalised — individual needs vary.</p>
+
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
+            <div class="pill">Calorie target: <strong id="calorieTarget">— kcal/day</strong></div>
+            <div class="pill">Protein: <strong id="proteinTarget">— g/day</strong></div>
+            <div class="pill">Activity: <strong id="activityTarget">—</strong></div>
+          </div>
+        </div>
+
+        <!-- Clinician contact: locked for non-subscribers -->
+        <div id="clinicianContactCard" class="profile-card" style="color: orange;" aria-live="polite">
+          <!-- JS will show locked or full contact based on subscription -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Diet Recommendations (expanded & personalised) -->
+    <section style="margin-top:20px">
+      <h3 style="color:var(--danger);margin-bottom:6px">Diet Recommendation</h3>
+      <p class="muted" style="color: seagreen;">Personalised meal plans and portion guidance across BMI categories. Pick the section matching the patient's category for tailored options.</p>
+
+      <div id="dietGrid" class="rec-grid" aria-live="polite"></div>
     </section>
 
-    <section id="dietSection">
-      <h3>Diet Recommendations</h3>
-      <div id="dietGrid" class="rec-grid"></div>
+    <!-- Exercise Recommendations (expanded & detailed) -->
+    <section style="margin-top:18px">
+      <h3 style="color:var(--danger);margin-bottom:6px">Exercise Recommendation</h3>
+      <p class="muted" style="color: seagreen;">Detailed exercise across FITT (frequency, intensity, time, type). Includes progressive plans and multiple yoga styles tailored by BMI category.</p>
+
+      <div id="exerciseGrid" class="rec-grid" aria-live="polite"></div>
     </section>
 
-    <section id="exerciseSection" style="margin-top:22px">
-      <h3>Exercise Recommendations</h3>
-      <div id="exerciseGrid" class="rec-grid"></div>
+    <!-- Red flags -->
+    <section style="margin-top:18px">
+      <h3 style="color:var(--primary);margin-bottom:6px">Red flags & when to seek urgent care</h3>
+      <ul class="example-list" style="max-width:780px">
+        <li>New or worsening chest pain, breathlessness, fainting or collapse.</li>
+        <li>Very high resting heart rate >120 bpm or fainting during activity.</li>
+        <li>Unexplained rapid weight gain (>2 kg in 3 days) or sudden swelling in legs.</li>
+        <li>Severe dizziness, confusion, or signs of infection (fever + wounds).</li>
+      </ul>
     </section>
+
+    <footer style="margin-top:28px;text-align:center;color:var(--muted);font-size:0.92rem">For educational purposes only. This is not a substitute for clinical care.</footer>
   </main>
 
-  <footer class="site-footer container">
-    <div>For educational purposes only. Consult a professional for medical advice.</div>
-    <div class="credits">Capstone Project — FitLife</div>
-  </footer>
+  <div class="scroll-top" id="scrollTop" aria-label="Scroll to top" title="Scroll to top" hidden>↑</div>
+
+  <!-- Subscription Modal (hidden until requested) -->
+  <div id="modalRoot" aria-hidden="true"></div>
 
   <script>
-    // updated suggestions per category (with examples)
-    const data = {
+    /***********************
+     * Data (expanded for diet + exercise + yoga)
+     ***********************/
+    const clinicalData = {
       Underweight: {
-        diet: [
+        calorieAdj: +400,
+        protein_g_per_kg: 1.6,
+        diet:[
           {
-            title:'Calorie-rich meals',
-            detail:'Add healthy calorie sources to your diet.',
-            examples:['Nuts','Dry fruits','Whole milk','Smoothies','Avocados','Fatty fish']
+            title:'Energy-dense, nutrient-rich plan',
+            detail:'Aim for 3 larger meals + 2 snacks. Emphasise calories with quality: healthy fats, blended meals if appetite low.',
+            examples:[
+              'Breakfast: Oats porridge with whole milk, banana, nut butter and honey',
+              'Snack: Smoothie (milk, banana, peanut butter, whey/soy protein)',
+              'Lunch: Rice + dal + paneer curry + ghee',
+              'Snack: Trail mix (nuts, dried fruits)',
+              'Dinner: Chapati + chicken curry + avocado salad'
+            ]
           },
           {
-            title:'Protein focus',
-            detail:'Include lean meats, eggs, legumes to support muscle gain.',
-            examples:['Eggs','Chicken breast','Paneer','Lentils','Tofu']
+            title:'Protein distribution',
+            detail:'Ensure ~20–30 g protein per meal to support muscle gain; add a post-strength-training snack.',
+            examples:[
+              '2 eggs + paneer/tofu in breakfast',
+              'Post-workout: Greek yoghurt + fruit'
+            ]
           },
           {
-            title:'Frequent meals',
-            detail:'Eat 5–6 smaller meals across the day.',
-            examples:['Mini sandwiches','Fruit bowls','Yogurt with granola']
-          },
-          {
-            title:'Complex carbs',
-            detail:'Oats, brown rice, potatoes for caloric support.',
-            examples:['Oats','Brown rice','Sweet potatoes']
-          },
-          {
-            title:'Healthy snacks',
-            detail:'Peanut butter, yogurt, bananas between meals.',
-            examples:['Banana shake','Peanut butter toast','Greek yogurt']
+            title:'Supplement & monitoring notes',
+            detail:'Consider micronutrient review (iron, B12). Monitor weight weekly and appetite cues.',
+            examples:['Consider dietitian review for tailored high-calorie oral supplements']
           }
         ],
-        exercise: [
-          {title:'Strength Training',detail:'3×/week, focus on compound lifts (squats, deadlifts, bench). Procedure: 3 sets, 6–10 reps. Progressive overload.'},
-          {title:'Compound Exercises',detail:'Squats, deadlifts, rows. Procedure: focus on form and increasing weight gradually.'},
-          {title:'Rest & Recovery',detail:'Allow 48–72 hours between heavy sessions. Sleep 7–9 hrs.'},
-          {title:'Low-intensity cardio',detail:'Short walks to maintain appetite; avoid long cardio that burns many calories.'},
-          {title:'Core strengthening',detail:'Planks and transverse core work: 3 sets of 30–45s.'}
-        ]
+        exercise:[
+          {title:'Strength priority — progressive overload',detail:'3 sessions/week focusing on compound lifts (squats, rows, deadlifts equivalent). Reps 6–12, sets 3; include eccentric control.'},
+          {title:'Low-volume cardio',detail:'Short walks 15–30 min to stimulate appetite; avoid long endurance that increases deficit.'},
+          {title:'Recovery & sleep',detail:'Ensure 7–9 hours sleep and 48–72h between heavy strength sessions.'}
+        ],
+        yoga:['Hatha (gentle strengthening)','Yin (short holds for relaxation)','Restorative (for recovery)']
       },
-      Normal: {
-        diet: [
+
+      Normal:{
+        calorieAdj: 0,
+        protein_g_per_kg: 1.2,
+        diet:[
           {
-            title:'Balanced macro split',
-            detail:'Include carbs, protein, and fats in every meal.',
-            examples:['Rice + lentils','Oats with fruits','Whole wheat roti with vegetables']
+            title:'Balanced plate approach',
+            detail:'~40% complex carbs, 30% protein, 30% vegetables/fats. Focus on whole foods and portion control.',
+            examples:[
+              'Breakfast: Oats with milk, seeds and fruit',
+              'Lunch: Brown rice + mixed dal + seasonal vegetables',
+              'Snack: Fruit + handful nuts',
+              'Dinner: Grilled fish/chicken + large salad + roti'
+            ]
           },
           {
-            title:'Portion control',
-            detail:'Maintain calorie intake for weight stability.',
-            examples:['Use smaller plates','Track portion sizes','Avoid second servings']
-          },
-          {
-            title:'Whole foods',
-            detail:'Eat fruits, vegetables, legumes and whole grains.',
-            examples:['Spinach','Apple','Brown rice','Chickpeas']
-          },
-          {
-            title:'Protein with every meal',
-            detail:'Helps maintain muscle mass.',
-            examples:['Eggs','Paneer','Fish','Soybean']
-          },
-          {
-            title:'Hydration',
-            detail:'2–3L water daily depending on activity.',
-            examples:['Plain water','Coconut water','Herbal tea']
+            title:'Timing & quality',
+            detail:'Maintain consistent meal timing; include fibre and lean protein for satiety.',
+            examples:['Legume-based snacks','Vegetable soups','Home-made chaat with roasted chana']
           }
         ],
-        exercise: [
-          {title:'Mixed Training',detail:'Combine cardio+strength 3–5×/week. Procedure: 30–45 min sessions.'},
-          {title:'HIIT (optional)',detail:'10–20 min HIIT once/twice weekly. Procedure: 20s hard / 40s rest, 8–12 rounds.'},
-          {title:'Mobility work',detail:'Daily mobility & stretching: 10–15 min.'},
-          {title:'Resistance sessions',detail:'2–3 strength sessions: 3 sets of 8–12 reps.'},
-          {title:'Active recovery',detail:'Light yoga or walking on rest days.'}
-        ]
+        exercise:[
+          {title:'Aerobic + strength mix',detail:'150 min moderate aerobic/week (eg. brisk walking/cycling) + 2 strength sessions/week.'},
+          {title:'Mobility & functional training',detail:'10–15 min daily mobility and functional movement practice.'}
+        ],
+        yoga:['Vinyasa (dynamic flow)','Ashtanga or Power (for fitness)','Iyengar (alignment & posture)']
       },
-      Overweight: {
-        diet: [
+
+      Overweight:{
+        calorieAdj: -350,
+        protein_g_per_kg: 1.4,
+        diet:[
           {
-            title:'Calorie deficit',
-            detail:'Reduce daily calories moderately (250–500 kcal deficit).',
-            examples:['Smaller portions','Avoid fried foods','Limit sugar intake']
+            title:'Safe moderate deficit',
+            detail:'Reduce ~250–500 kcal/day from estimated needs; prioritise protein and fibre to maximise satiety.',
+            examples:[
+              'Breakfast: Vegetable omelette + wholegrain toast',
+              'Lunch: Large salad with chickpeas + grilled protein',
+              'Snack: Greek yoghurt with berries',
+              'Dinner: Soup-based meal + salad'
+            ]
           },
           {
-            title:'Protein rich diet',
-            detail:'Helps preserve muscle while losing fat.',
-            examples:['Egg whites','Chicken breast','Paneer','Lentils']
-          },
-          {
-            title:'Reduce processed foods',
-            detail:'Limit sugary drinks and fried foods.',
-            examples:['Avoid soft drinks','Avoid chips','Limit pastries']
-          },
-          {
-            title:'Increase vegetables',
-            detail:'High volume, low calorie foods to fill you up.',
-            examples:['Broccoli','Cucumber','Spinach','Carrot']
-          },
-          {
-            title:'Controlled portions',
-            detail:'Measure and plan meals to avoid overeating.',
-            examples:['Use measuring cups','Avoid seconds','Eat slowly']
+            title:'Behavioural strategies',
+            detail:'Control liquid calories, reduce processed foods, increase vegetables and slow eating.',
+            examples:['Swap sweet beverages for infused water','Use smaller plate sizes']
           }
         ],
-        exercise: [
-          {title:'Cardio workouts',detail:'30–45 min moderate cardio (brisk walk, cycling). Procedure: 5×/week.'},
-          {title:'Strength training',detail:'2–3×/week to preserve muscle: compound lifts, 3 sets of 8–12 reps.'},
-          {title:'Interval training',detail:'HIIT 1–2×/week if suitable: 10–20 min.'},
-          {title:'Daily steps goal',detail:'Aim for 7–10k steps/day.'},
-          {title:'Flexibility & core',detail:'Stretching & core work 2–3×/week.'}
-        ]
+        exercise:[
+          {title:'Steady progress aerobic',detail:'30–45 min moderate cardio 4–5 days/week; increase daily steps and reduce sedentary time.'},
+          {title:'Resistance training',detail:'2–3 sessions/week to preserve lean mass and metabolic rate.'},
+          {title:'HIIT (optional)',detail:'Short high-intensity intervals 1–2/week if tolerated and cleared by clinician.'}
+        ],
+        yoga:['Kundalini (breath + movement)','Vinyasa for calorie burn','Chair Yoga (for joint issues)']
       },
-      Obese: {
-        diet: [
+
+      Obese:{
+        calorieAdj: -400,
+        protein_g_per_kg: 1.4,
+        diet:[
           {
-            title:'Medical guidance',
-            detail:'Seek a clinician/dietitian before starting aggressive diet.',
-            examples:['Dietitian consultation','Medical checkup','Personalized plan']
+            title:'Clinical oversight & gradual change',
+            detail:'Medical evaluation advised before aggressive restriction. Aim for a realistic, sustainable deficit with high-fibre and protein-rich foods.',
+            examples:[
+              'Breakfast: High-fibre porridge with seeds',
+              'Lunch: Lentil soup + salad + lean protein',
+              'Snack: Raw vegetables + hummus',
+              'Dinner: Steamed fish + non-starchy vegetables'
+            ]
           },
           {
-            title:'Structured low-calorie plan',
-            detail:'Supervised calorie reduction with nutrient adequacy.',
-            examples:['Meal prep plans','High-fiber foods','Protein shakes']
-          },
-          {
-            title:'High protein, low processed carbs',
-            detail:'Helps satiety and preserves lean mass.',
-            examples:['Eggs','Grilled chicken','Legumes']
-          },
-          {
-            title:'Vegetable heavy meals',
-            detail:'High fiber, low energy density foods.',
-            examples:['Cabbage','Cauliflower','Salad greens']
-          },
-          {
-            title:'Track intake',
-            detail:'Use a food diary or app to monitor calories.',
-            examples:['MyFitnessPal app','Calorie tracker','Diet journal']
+            title:'Structured meal plan',
+            detail:'Use portion-controlled meals, plan weekly menus, and use behaviour-change techniques (logging, meal prepping).',
+            examples:['Consider supervised weight-management program if BMI very high or comorbidities present']
           }
         ],
-        exercise: [
-          {title:'Low-impact cardio',detail:'Swimming, cycling, brisk walking. Procedure: 20–40 min, build gradually.'},
-          {title:'Beginner strength',detail:'Bodyweight and machine-based strength 2×/week.'},
-          {title:'Professional supervision',detail:'If high BMI, exercise with guidance initially.'},
-          {title:'Flexibility & balance',detail:'Daily stretching to reduce injury risk.'},
-          {title:'Gradual progression',detail:'Increase duration/intensity slowly to avoid injury.'}
-        ]
+        exercise:[
+          {title:'Low-impact start',detail:'Walking, cycling, pool-based exercise 20–40 min/day and progress intensity gradually.'},
+          {title:'Strength-based progression',detail:'Machine/body-weight resistance 2×/week to support function and metabolic health.'},
+          {title:'Functional activities',detail:'Focus on balance, joint mobility and activities of daily living (ADLs).'}
+        ],
+        yoga:['Gentle Hatha','Chair Yoga','Restorative with breathing work']
       }
     };
 
+    /***********************
+     * Utilities & Query params
+     ***********************/
     function getQueryParams(){
       const params = new URLSearchParams(window.location.search);
       return {
         bmi: params.get('bmi') || '—',
-        category: params.get('category') || '—'
-      };
-    } 
+        category: params.get('category') || 'Normal',
+        age: params.get('age') || '—',
+        sex: params.get('sex') || '—',
+        name: params.get('name') || '',
+        weight: params.get('weight') || ''
+      }
+    }
 
-    function render() {
-      const {bmi, category} = getQueryParams();
-      document.getElementById('displayBMI').textContent = `BMI: ${bmi}`;
-      document.getElementById('displayCat').textContent = `Category: ${category}`;
+    function renderRiskAssessment(cat){
+  const riskBadge = document.getElementById('riskBadge');
+  const riskList = document.getElementById('riskList');
+  
+  const risks = {
+    Underweight: {
+      level: "Moderate Risk",
+      class: "risk-moderate",
+      points: [
+        "Higher chance of nutritional deficiencies",
+        "Weak immunity and frequent infections",
+        "Reduced muscle strength and fatigue"
+      ]
+    },
+    Normal: {
+      level: "Low Risk",
+      class: "risk-low",
+      points: [
+        "Healthy BMI range",
+        "Maintain balanced diet & active lifestyle",
+        "Continue routine health check-ups"
+      ]
+    },
+    Overweight: {
+      level: "Moderate Risk",
+      class: "risk-moderate",
+      points: [
+        "Increased risk of prediabetes",
+        "Joint discomfort on prolonged activity",
+        "Possible early signs of metabolic syndrome"
+      ]
+    },
+    Obese: {
+      level: "High Risk",
+      class: "risk-high",
+      points: [
+        "Higher risk of diabetes & hypertension",
+        "Increased strain on joints and mobility limitations",
+        "Potential sleep apnea and cardiovascular load"
+      ]
+    }
+  };
 
-      const dietGrid = document.getElementById('dietGrid');
-      const exerciseGrid = document.getElementById('exerciseGrid');
+  const data = risks[cat] || risks["Normal"];
 
-      const catData = data[category] || data['Normal'];
+  // Update badge
+  riskBadge.textContent = data.level;
+  riskBadge.className = data.class;
 
-      // Diet
-      dietGrid.innerHTML = '';
-      catData.diet.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'rec-card';
-        div.innerHTML = `
-          <h4>${item.title}</h4>
-          <p class="exercise-proc">${item.detail}</p>
-          ${item.examples ? `<ul class="example-list">${item.examples.map(ex => `<li>${ex}</li>`).join('')}</ul>` : ''}
-        `;
-        dietGrid.appendChild(div);
-      });
+  // Update bullet points
+  riskList.innerHTML = "";
+  data.points.forEach(p=>{
+    const li = document.createElement("li");
+    li.textContent = p;
+    riskList.appendChild(li);
+  });
+}
 
-      // Exercise + procedure
-      exerciseGrid.innerHTML = '';
-      catData.exercise.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'rec-card';
-        div.innerHTML = `<h4>${item.title}</h4><p class="exercise-proc">${item.detail}</p>`;
-        exerciseGrid.appendChild(div);
+    /***********************
+     * Renderers
+     ***********************/
+    function renderClinical(){
+      const {bmi,category,age,sex,name,weight} = getQueryParams();
+      const cat = clinicalData[category] ? category : 'Normal';
+      document.getElementById('displayBMI').textContent = bmi;
+      document.getElementById('displayCat').textContent = cat;
+      document.getElementById('displayAge').textContent = age;
+      document.getElementById('displaySex').textContent = sex;
+      if(name) document.getElementById('patientName').textContent = `Clinical Summary — ${name}`;
+
+      // calorie target (simple baseline estimate)
+      const base = 2000;
+      const calorieTarget = base + clinicalData[cat].calorieAdj;
+      document.getElementById('calorieTarget').textContent = `${calorieTarget} kcal/day`;
+
+      const assumedWeight = Number(weight) || 70;
+      document.getElementById('proteinTarget').textContent = `${Math.round(clinicalData[cat].protein_g_per_kg * assumedWeight)} g/day (${clinicalData[cat].protein_g_per_kg} g/kg)`;
+      document.getElementById('activityTarget').textContent = cat === 'Underweight' ? 'Strength-focused' : (cat === 'Obese' ? 'Low-impact aerobic + strength' : 'Mixed cardio + resistance');
+
+      // clinician note
+      const noteEl = document.getElementById('clinicianNote');
+      noteEl.innerHTML = `Primary considerations for <strong>${cat}</strong> individuals. This page includes personalised diet & exercise templates. For complex medical conditions, obtain clinician review.`;
+
+      // render diet and exercise
+      renderDiet(cat);
+      renderExercise(cat);
+
+      renderRiskAssessment(cat);
+
+      // clinician contact card build
+      renderClinicianContact();
+    }
+
+    function renderDiet(cat){
+      const dietGrid = document.getElementById('dietGrid'); dietGrid.innerHTML='';
+      clinicalData[cat].diet.forEach(item=>{
+        const card = document.createElement('div'); card.className='rec-card';
+        card.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p class="muted">${escapeHtml(item.detail)}</p>`;
+        if(item.examples){
+          const ul = document.createElement('ul'); ul.className='example-list';
+          item.examples.forEach(ex=>{ const li = document.createElement('li'); li.textContent = ex; ul.appendChild(li); });
+          card.appendChild(ul);
+        }
+        dietGrid.appendChild(card);
       });
     }
 
-    window.addEventListener('DOMContentLoaded', render);
+    function renderExercise(cat){
+      const exerciseGrid = document.getElementById('exerciseGrid'); exerciseGrid.innerHTML='';
+      clinicalData[cat].exercise.forEach(item=>{
+        const card = document.createElement('div'); card.className='rec-card';
+        card.innerHTML = `<h4>${escapeHtml(item.title)}</h4><p class="muted">${escapeHtml(item.detail)}</p>`;
+        exerciseGrid.appendChild(card);
+      });
+      // yoga options
+      const yogaCard = document.createElement('div'); yogaCard.className='rec-card';
+      yogaCard.innerHTML = `<h4>Recommended Yoga Styles</h4><p class="muted">Multiple yoga practices that complement the above plan.</p>`;
+      const list = document.createElement('ul'); list.className='example-list';
+      (clinicalData[cat].yoga || []).forEach(y=>{ const li = document.createElement('li'); li.textContent = y; list.appendChild(li); });
+      yogaCard.appendChild(list);
+      exerciseGrid.appendChild(yogaCard);
+    }
+
+    function renderClinicianContact(){
+      const root = document.getElementById('clinicianContactCard');
+      root.innerHTML = ''; // clear
+      const subscribed = localStorage.getItem('fitlife-subscribed') === 'true';
+
+      if(subscribed){
+        // show full contact info
+        root.innerHTML = `
+          <h3>Clinician contact</h3>
+          <p class="muted">If this report is being used clinically, share results with a registered clinician. Example: <strong>Dr. A. Kumar — General Physician / Dietitian</strong></p>
+          <p style="margin-top:8px">Clinic phone: <a class="link-btn" href="tel:+919876543210">+91 98765 43210</a></p>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-ghost" id="copyReport">Copy summary</button>
+            <button class="btn" id="downloadJSON">Download JSON</button>
+            <button class="btn" id="revokeSub">Revoke subscription</button>
+          </div>
+        `;
+        // wire up the re-bound buttons inside this block
+        document.getElementById('copyReport').addEventListener('click', ()=>{
+          const rep = collectReport(); navigator.clipboard.writeText(JSON.stringify(rep, null, 2)).then(()=>alert('Summary copied to clipboard'));
+        });
+        document.getElementById('downloadJSON').addEventListener('click', ()=>{
+          const report = collectReport(); const blob = new Blob([JSON.stringify(report, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'fitlife-report.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        });
+        document.getElementById('revokeSub').addEventListener('click', ()=>{
+          if(confirm('Revoke subscription? This will lock premium features.')){ localStorage.setItem('fitlife-subscribed','false'); renderClinicianContact(); alert('Subscription revoked.'); }
+        });
+      } else {
+        // locked card with CTA
+        root.innerHTML = `
+          <div class="locked-overlay" aria-hidden="false">
+            <div class="lock-box">
+              <div class="lock-badge">🔒</div>
+              <div><strong>Clinician contact — Premium</strong></div>
+              <div class="sub-note">This information is available to subscribed users. Subscribe to view clinician contact details and additional premium features.</div>
+              <div style="margin-top:8px"><button id="lockedSubscribe" class="btn-subscribe">Subscribe ₹599</button></div>
+            </div>
+          </div>
+        `;
+        document.getElementById('lockedSubscribe').addEventListener('click', ()=> openSubscriptionModal());
+      }
+    }
+
+    /***********************
+     * Helpers & interactions
+     ***********************/
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+
+    // Scroll to top button
+    const scrollTopBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll',()=>{
+      if(window.scrollY > 300) scrollTopBtn.hidden = false; else scrollTopBtn.hidden = true;
+    });
+    scrollTopBtn.addEventListener('click',()=> window.scrollTo({top:0,behavior:'smooth'}));
+
+    // Dark mode toggle
+    const darkToggle = document.getElementById('darkToggle');
+    function applyTheme(theme){
+      if(theme === 'dark'){ document.documentElement.setAttribute('data-theme','dark'); darkToggle.textContent='☀️ Light'; darkToggle.setAttribute('aria-pressed','true'); }
+      else{ document.documentElement.removeAttribute('data-theme'); darkToggle.textContent='🌙 Dark'; darkToggle.setAttribute('aria-pressed','false'); }
+    }
+    const savedTheme = localStorage.getItem('fitlife-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    applyTheme(savedTheme);
+    darkToggle.addEventListener('click',()=>{ const next = document.documentElement.hasAttribute('data-theme') ? 'light' : 'dark'; applyTheme(next); localStorage.setItem('fitlife-theme', next); });
+
+    // Save plan and download
+    document.getElementById('savePlan').addEventListener('click', ()=>{
+      const report = collectReport();
+      localStorage.setItem('fitlife-last-report', JSON.stringify(report));
+      alert('Plan saved locally. You can download it as JSON.');
+    });
+
+    document.getElementById('downloadJSON').addEventListener('click', ()=>{
+      // top-level download (note: if clinician card has its own download, that will still work)
+      const report = collectReport();
+      const blob = new Blob([JSON.stringify(report, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'fitlife-report.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // Print button
+    document.getElementById('printBtn').addEventListener('click', ()=> window.print());
+
+    // Back button (uses history)
+    document.getElementById('backBtn').addEventListener('click', ()=> history.back());
+
+    // WhatsApp share
+    document.getElementById('sendWhatsApp').addEventListener('click', ()=>{
+      const rep = collectReport();
+      const text = `FitLife clinical summary:\nName: ${rep.name || '—'}\nBMI: ${rep.bmi} (${rep.category})\nCalorie: ${rep.calorieTarget}\nProtein: ${rep.proteinTarget}\nFollow up: ${rep.followUp}`;
+      const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(url,'_blank');
+    });
+
+    // Utility to collect a consistent report
+    function collectReport(){
+      const {bmi,category,name,age,sex} = getQueryParams();
+      const calorieTarget = document.getElementById('calorieTarget').textContent;
+      const proteinTarget = document.getElementById('proteinTarget').textContent;
+      const followUp = 'See clinician plan'; // follow-up removed earlier — keep placeholder
+      const timestamp = new Date().toISOString();
+      return {name,age,sex,bmi,category,calorieTarget,proteinTarget,followUp,timestamp};
+    }
+
+    /***********************
+     * Subscription modal & flow
+     ***********************/
+    const modalRoot = document.getElementById('modalRoot');
+    const subscribeBtn = document.getElementById('subscribeBtn');
+    subscribeBtn.addEventListener('click', ()=> openSubscriptionModal());
+    function openSubscriptionModal(){
+      // Create modal elements
+      modalRoot.setAttribute('aria-hidden','false');
+      const backdrop = document.createElement('div'); backdrop.className='modal-backdrop'; backdrop.id='subModalBackdrop';
+      backdrop.innerHTML = `
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="subModalTitle">
+          <h4 id="subModalTitle">Subscribe to FitLife Premium</h4>
+          <p class="muted">Unlock clinician contact, premium export features and future advanced tools. One-time subscription: <strong>₹599</strong>.</p>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <div style="flex:1">
+              <label style="font-size:0.9rem;color:var(--muted);display:block;margin-bottom:6px">Payment method</label>
+              <select id="paymentMethod" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)">
+                <option>UPI / Debit / Credit / Netbanking</option>
+                <option>Prefer UPI</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-top:14px">
+            <div style="flex:1">
+              <div style="font-weight:700;font-size:1.25rem">₹599</div>
+              <div class="muted" style="font-size:0.92rem;margin-top:4px">One-time — access premium features now</div>
+            </div>
+            <div>
+              <button id="confirmPurchase" class="btn">Purchase</button>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button id="closeModal" class="btn-ghost">Cancel</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(backdrop);
+
+      // handlers
+      backdrop.querySelector('#closeModal').addEventListener('click', closeSubscriptionModal);
+      backdrop.querySelector('#confirmPurchase').addEventListener('click', ()=> {
+        // Simulate a purchase flow. In production, replace with real payment gateway integration.
+        const ok = confirm('Proceed to purchase FitLife Premium for ₹599? (This is a simulation.)');
+        if(ok){
+          localStorage.setItem('fitlife-subscribed','true');
+          alert('Subscription successful — thank you! Premium features unlocked.');
+          closeSubscriptionModal();
+          renderClinicianContact(); // refresh clinician card to show contact
+        }
+      });
+
+      // allow closing by clicking backdrop area (but not modal)
+      backdrop.addEventListener('click', (e)=>{
+        if(e.target === backdrop) closeSubscriptionModal();
+      });
+
+      // focus management
+      backdrop.querySelector('#confirmPurchase').focus();
+    }
+
+    function closeSubscriptionModal(){
+      const backdrop = document.getElementById('subModalBackdrop');
+      if(backdrop){ backdrop.remove(); modalRoot.setAttribute('aria-hidden','true'); }
+    }
+
+    // also add locked subscribe button inside clinician card handler
+    document.addEventListener('click', (e)=>{
+      if(e.target && e.target.id === 'lockedSubscribe'){ openSubscriptionModal(); }
+    });
+
+    // If the top subscription button shows current state (optional quick indicator)
+    function updateSubscribeButtonState(){
+      const s = localStorage.getItem('fitlife-subscribed') === 'true';
+      const btn = document.getElementById('subscribeBtn');
+      if(s){ btn.textContent = '✓ Subscribed'; btn.disabled = false; btn.title='You are subscribed'; btn.style.opacity=1; }
+      else { btn.textContent = '✨ Subscribe'; btn.title='Subscribe for premium features'; btn.style.opacity=1; }
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', ()=>{
+      renderClinical();
+      updateSubscribeButtonState();
+      // initial scroll button state
+      scrollTopBtn.hidden = window.scrollY <= 300;
+    });
+
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-

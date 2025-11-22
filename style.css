@@ -7,6 +7,204 @@
   --container-width:1100px;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
+
+/* ===========================
+   GLOBAL DARK THEME
+   =========================== */
+
+[data-theme="dark"] {
+  --dark-bg: #0d1117;
+  --dark-card: #161b22;
+  --dark-card-light: #1c2128;
+  --dark-text: #e6edf3;
+  --dark-muted: #9da5b4;
+  --dark-border: #30363d;
+
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Body */
+[data-theme="dark"] body {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+/* ===========================
+   NAVBAR
+   =========================== */
+[data-theme="dark"] header {
+  background: #161b22 !important;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.06) !important;
+}
+
+[data-theme="dark"] .navbar .nav-links a {
+  color: var(--dark-text) !important;
+}
+
+[data-theme="dark"] .navbar .nav-links a:hover {
+  color: #58a6ff !important;
+}
+
+/* Hamburger */
+[data-theme="dark"] .hamburger span {
+  background: #e6edf3 !important;
+}
+
+/* ===========================
+   SIDE MENU
+   =========================== */
+[data-theme="dark"] .side-menu {
+  background: #161b22 !important;
+  border-right: 1px solid var(--dark-border);
+}
+
+[data-theme="dark"] .side-menu a {
+  color: var(--dark-text) !important;
+  border-bottom: 1px solid var(--dark-border) !important;
+}
+
+[data-theme="dark"] .side-menu a:hover {
+  background: #1c2128 !important;
+}
+
+[data-theme="dark"] .btn-ghost {
+  background: #21262d !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ===========================
+   HERO SECTION
+   =========================== */
+[data-theme="dark"] #home.hero {
+  background: #0d1117 !important;
+}
+
+[data-theme="dark"] .hero-left h1,
+[data-theme="dark"] .lead {
+  color: var(--dark-text) !important;
+}
+
+/* ===========================
+   BMI CALCULATOR
+   =========================== */
+[data-theme="dark"] .card,
+[data-theme="dark"] .calc-left,
+[data-theme="dark"] .result-card {
+  background: var(--dark-card) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select {
+  background: #0d1117 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* Needle Gauge Mask Light Fix */
+[data-theme="dark"] .gauge::before {
+  background: var(--dark-card) !important;
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+[data-theme="dark"] .btn-primary {
+  background: #238636 !important;
+  color: #fff !important;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: #2ea043 !important;
+}
+
+[data-theme="dark"] .btn-subscribe,
+[data-theme="dark"] .btn-suubscribe {
+  color: #fff !important;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.5) !important;
+}
+
+/* ===========================
+   MINI CARDS / SECTIONS
+   =========================== */
+[data-theme="dark"] .mini-card,
+[data-theme="dark"] .minii-card {
+  background: var(--dark-card-light) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* Quick info background */
+[data-theme="dark"] .preview-cards {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+/* ===========================
+   HEART SECTION
+   =========================== */
+[data-theme="dark"] #heartSection {
+  background: #161b22 !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+[data-theme="dark"] #heartSection .mini-card {
+  background: #1c2128 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ===========================
+   YOGA SECTION
+   =========================== */
+[data-theme="dark"] #yogaSection {
+  background: #161b22 !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+[data-theme="dark"] #yogaSection .mini-card {
+  background: #1c2128 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+/* FIX HEART + YOGA SECTION TEXT NOT VISIBLE */
+[data-theme="dark"] #heartSection,
+[data-theme="dark"] #heartSection * {
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] #yogaSection,
+[data-theme="dark"] #yogaSection * {
+  color: #e6edf3 !important;
+}
+
+/* Fix mini-card backgrounds inside sections */
+[data-theme="dark"] #heartSection .mini-card,
+[data-theme="dark"] #yogaSection .mini-card {
+  background: #1c2128 !important;
+  border: 1px solid #30363d !important;
+}
+
+/* Special icons / emojis */
+[data-theme="dark"] #heartSection .icon,
+[data-theme="dark"] #yogaSection .icon {
+  filter: brightness(200%) !important;
+}
+
+/* ===========================
+   ABOUT + FOOTER
+   =========================== */
+[data-theme="dark"] .about,
+[data-theme="dark"] .site-footer {
+  background: #161b22 !important;
+  border: 1px solid var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+
 *{box-sizing:border-box}
 body{margin:0;color:var(--dark);background:#ffffff;line-height:1.5}
 .container{max-width:var(--container-width);margin:0 auto;padding:28px}
@@ -780,6 +978,7 @@ header {
   font-size: 0.85rem;
 }
 .history-btn:hover { background: rgba(255,255,255,0.2); }
+
 
 
 

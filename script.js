@@ -158,169 +158,185 @@ document.addEventListener('DOMContentLoaded', () => {
     darkToggle.addEventListener('click',()=>{ const next = document.documentElement.hasAttribute('data-theme') ? 'light' : 'dark'; applyTheme(next); localStorage.setItem('fitlife-theme', next); });
 
 
-   // ===== Fii AI Assistant Logic (replace old code block) =====
+   // ===== Fii AI — Robust Professional Implementation =====
+document.addEventListener("DOMContentLoaded", () => {
+  const FII_BACKEND = "http://localhost:5000"; // change for production
 
-const FII_BACKEND = "http://localhost:5000"; // change to your deployed backend URL when live
+  // DOM refs
+  const fiiBtn = document.getElementById("fiiAiBtn");
+  const fiiChat = document.getElementById("fiiAiChat");
+  const closeFiiAi = document.getElementById("closeFiiAi");
+  const sendBtn = document.getElementById("sendMsg");
+  const userInput = document.getElementById("userInput");
+  const chatBody = document.getElementById("fiiChatBody");
+  const openHistoryBtn = document.getElementById("openHistory");
+  const historyPanel = document.getElementById("fiiHistoryPanel");
+  const historyList = document.getElementById("historyList");
+  const historyOverlay = document.getElementById("historyOverlay");
+  const clearBtn = document.getElementById("clearSession");
 
-const fiiBtn = document.getElementById("fiiAiBtn");
-const fiiChat = document.getElementById("fiiAiChat");
-const closeFiiAi = document.getElementById("closeFiiAi");
-const sendMsg = document.getElementById("sendMsg");
-const userInput = document.getElementById("userInput");
-const fiiChatBody = document.getElementById("fiiChatBody");
-const openHistoryBtn = document.getElementById("openHistory");
+  const STORAGE_KEY = "fii_sessions_v3";
 
-// Local storage key
-const STORAGE_KEY = "fii_history_v1";
+  // sessions: array of sessions; each session = {id,timestamp, messages:[{role,content}]}
+  let sessions = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  let currentSession = { id: genId(), timestamp: Date.now(), messages: [] };
 
-// Load history from localStorage (array of {role, content})
-let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  // helpers
+  function genId() { return "s_" + Math.random().toString(36).slice(2, 9); }
+  function saveSessions() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions)); } catch(e) { console.warn("saveSessions err",e); } }
+  function nowReadable(ts) { const d = new Date(ts); return d.toLocaleString(); }
 
-// Helper: render the chat body from history
-function renderChatBody() {
-  fiiChatBody.innerHTML = "";
-  if (history.length === 0) {
-    const welcome = document.createElement("div");
-    welcome.className = "ai-message";
-    welcome.textContent = "Hi 👋 I'm Fii AI! How can I help you today?";
-    fiiChatBody.appendChild(welcome);
-    return;
+  // render chat (takes messages array)
+  function renderMessages(msgs = currentSession.messages) {
+    chatBody.innerHTML = "";
+    if (!msgs.length) {
+      const el = document.createElement("div");
+      el.className = "ai-bubble ai-msg";
+      el.textContent = "Hi 👋 I'm Fii AI! How can I help you today?";
+      chatBody.appendChild(el);
+      return;
+    }
+    msgs.forEach(m => {
+      const el = document.createElement("div");
+      el.className = m.role === "assistant" ? "ai-bubble ai-msg" : "ai-bubble user-msg";
+      el.textContent = m.content;
+      chatBody.appendChild(el);
+    });
+    chatBody.scrollTop = chatBody.scrollHeight;
   }
-  for (const m of history) {
-    const div = document.createElement("div");
-    div.textContent = m.content;
-    div.className = m.role === "assistant" ? "ai-message" : "user-message";
-    fiiChatBody.appendChild(div);
+
+  // history UI
+  function openHistory() {
+    rebuildHistoryList();
+    historyPanel.classList.add("open");
+    historyOverlay.style.display = "block";
+    historyPanel.setAttribute("aria-hidden", "false");
+    historyOverlay.setAttribute("aria-hidden", "false");
   }
-  fiiChatBody.scrollTop = fiiChatBody.scrollHeight;
-}
-
-// Save history helper
-function saveHistory() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-}
-
-// Open chat
-fiiBtn.addEventListener("click", () => {
-  fiiChat.style.display = "flex";
-  renderChatBody();
-});
-
-// Close chat
-closeFiiAi.addEventListener("click", () => {
-  fiiChat.style.display = "none";
-});
-
-// Scroll effect → button changes to circle
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 200) {
-    fiiBtn.classList.add("scrolled");
-    fiiBtn.textContent = "Fii";
-  } else {
-    fiiBtn.classList.remove("scrolled");
-    fiiBtn.textContent = "Fii AI";
+  function closeHistory() {
+    historyPanel.classList.remove("open");
+    historyOverlay.style.display = "none";
+    historyPanel.setAttribute("aria-hidden", "true");
+    historyOverlay.setAttribute("aria-hidden", "true");
   }
-});
 
-// Open History - toggles a simple modal/panel inside the chat top
-openHistoryBtn && openHistoryBtn.addEventListener("click", () => {
-  // We'll reuse the chat body as a simple history list view
-  // For a nicer UI you can implement a separate panel instead
-  const historyPanel = document.createElement("div");
-  historyPanel.style.position = "absolute";
-  historyPanel.style.left = "12px";
-  historyPanel.style.top = "56px";
-  historyPanel.style.width = "260px";
-  historyPanel.style.maxHeight = "320px";
-  historyPanel.style.overflow = "auto";
-  historyPanel.style.background = "#fff";
-  historyPanel.style.border = "1px solid #eee";
-  historyPanel.style.boxShadow = "0 6px 18px rgba(0,0,0,0.12)";
-  historyPanel.style.padding = "8px";
-  historyPanel.style.zIndex = 1100;
-
-  historyPanel.innerHTML = `<strong>Conversation history</strong><button id="closeHistoryPanel" style="float:right">Close</button><div style="clear:both"></div>`;
-  if (history.length === 0) {
-    const p = document.createElement("div");
-    p.textContent = "No history yet.";
-    p.style.marginTop = "8px";
-    historyPanel.appendChild(p);
-  } else {
-    history.slice().reverse().forEach((m, i) => {
-      const r = document.createElement("div");
-      r.style.padding = "6px";
-      r.style.borderBottom = "1px solid #f1f1f1";
-      r.innerHTML = `<small style="color:#888">${m.role}</small><div>${m.content}</div>`;
-      historyPanel.appendChild(r);
+  function rebuildHistoryList() {
+    historyList.innerHTML = "";
+    if (!sessions.length) {
+      const p = document.createElement("div"); p.className = "history-item"; p.textContent = "No previous chats.";
+      historyList.appendChild(p); return;
+    }
+    // recent first
+    sessions.slice().reverse().forEach(s => {
+      const item = document.createElement("div"); item.className = "history-item";
+      // summary: first user message OR first assistant if none
+      const firstUser = s.messages.find(m => m.role === "user");
+      const summaryText = firstUser ? firstUser.content.slice(0, 80) : (s.messages[0]?.content?.slice(0,80) || "Empty session");
+      const title = document.createElement("div"); title.textContent = summaryText;
+      const meta = document.createElement("div"); meta.className = "meta"; meta.textContent = nowReadable(s.timestamp);
+      item.appendChild(title); item.appendChild(meta);
+      item.addEventListener("click", () => {
+        // open that session in chat body (do not change currentSession array)
+        currentSession = { id: s.id, timestamp: s.timestamp, messages: JSON.parse(JSON.stringify(s.messages)) };
+        renderMessages(currentSession.messages);
+        closeHistory();
+      });
+      historyList.appendChild(item);
     });
   }
 
-  document.querySelector(".fii-ai-chatbox").appendChild(historyPanel);
-
-  document.getElementById("closeHistoryPanel").addEventListener("click", () => {
-    historyPanel.remove();
+  // open/close chat controls
+  fiiBtn.addEventListener("click", () => {
+    fiiChat.style.display = "flex";
+    fiiChat.setAttribute("aria-hidden", "false");
+    renderMessages();
+    userInput.focus();
   });
-});
+  closeFiiAi.addEventListener("click", () => {
+    fiiChat.style.display = "none";
+    fiiChat.setAttribute("aria-hidden", "true");
+  });
 
-// Send message handler - sends to backend and updates history
-async function sendFiiMessage() {
-  const text = userInput.value.trim();
-  if (!text) return;
+  // open/close history
+  openHistoryBtn.addEventListener("click", openHistory);
+  historyOverlay.addEventListener("click", closeHistory);
+  document.getElementById("closeHistoryBtn").addEventListener("click", closeHistory);
 
-  // push user message to history and render immediately
-  history.push({ role: "user", content: text });
-  saveHistory();
-  renderChatBody();
+  // clear current session (start new)
+  clearBtn && clearBtn.addEventListener("click", () => {
+    // push current to sessions if has messages
+    if (currentSession.messages.length) {
+      sessions.push(currentSession);
+      saveSessions();
+    }
+    currentSession = { id: genId(), timestamp: Date.now(), messages: [] };
+    renderMessages();
+  });
 
-  userInput.value = "";
-  userInput.focus();
+  // sending msg
+  async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+    // push user message
+    currentSession.messages.push({ role: "user", content: text });
+    renderMessages(currentSession.messages);
+    userInput.value = ""; userInput.focus();
 
-  // show temporary typing indicator
-  const typingEl = document.createElement("div");
-  typingEl.className = "ai-message";
-  typingEl.textContent = "Fii AI is typing...";
-  fiiChatBody.appendChild(typingEl);
-  fiiChatBody.scrollTop = fiiChatBody.scrollHeight;
+    // typing indicator
+    const typingEl = document.createElement("div");
+    typingEl.className = "typing";
+    typingEl.textContent = "Fii AI is typing...";
+    chatBody.appendChild(typingEl);
+    chatBody.scrollTop = chatBody.scrollHeight;
 
-  try {
-    const res = await fetch(`${FII_BACKEND}/api/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: text,
-        history // send existing history for context
-      })
-    });
-
-    const data = await res.json();
-    // remove typing
-    typingEl.remove();
-
-    const reply = data.reply || "Sorry, I couldn't generate a response.";
-    // append assistant message to history and save
-    history.push({ role: "assistant", content: reply });
-    saveHistory();
-    renderChatBody();
-  } catch (err) {
-    console.error("Fii AI request error:", err);
-    typingEl.remove();
-    const errDiv = document.createElement("div");
-    errDiv.className = "ai-message";
-    errDiv.textContent = "Network error. Please try again.";
-    fiiChatBody.appendChild(errDiv);
+    try {
+      const resp = await fetch(`${FII_BACKEND}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text, history: currentSession.messages })
+      });
+      const data = await resp.json();
+      typingEl.remove();
+      const reply = data.reply || "Sorry, I couldn't generate a response.";
+      currentSession.messages.push({ role: "assistant", content: reply });
+      renderMessages(currentSession.messages);
+    } catch (err) {
+      console.error("Fii AI fetch error:", err);
+      typingEl.remove();
+      currentSession.messages.push({ role: "assistant", content: "⚠️ Network error. Please try again." });
+      renderMessages(currentSession.messages);
+    }
   }
-}
 
-// Wire send button and Enter key
-sendMsg.addEventListener("click", sendFiiMessage);
-userInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendFiiMessage();
-  }
+  // send on click or Enter
+  sendBtn.addEventListener("click", sendMessage);
+  userInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    // auto-resize textarea
+    setTimeout(() => {
+      userInput.style.height = "auto";
+      userInput.style.height = (userInput.scrollHeight) + "px";
+    }, 0);
+  });
+
+  // scroll shrinking button
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 200) { fiiBtn.classList.add("scrolled"); fiiBtn.textContent = "Fii"; }
+    else { fiiBtn.classList.remove("scrolled"); fiiBtn.textContent = "Fii AI"; }
+  });
+
+  // before unload: save current session if not empty
+  window.addEventListener("beforeunload", () => {
+    if (currentSession.messages.length) {
+      // store snapshot
+      sessions.push(JSON.parse(JSON.stringify(currentSession)));
+      saveSessions();
+    }
+  });
+
+  // initial render (fresh session)
+  renderMessages();
+
+  // small helper: if sessions exist and you want to auto-load last, you can... (we don't auto-load per spec)
 });
-
-// initial render
-renderChatBody();
-
 

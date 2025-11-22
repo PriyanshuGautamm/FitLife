@@ -840,149 +840,67 @@ header {
   }
 }
 
-/* =========================
-   Fii AI Assistant Styling
-   ========================= */
-.fii-ai-btn {
-  position: fixed;
-  bottom: 25px;
-  right: 30px;
-  background: linear-gradient(45deg, #ff0055, #ffae00, #00c6ff, #a800ff);
-  background-size: 300% 300%;
-  animation: rainbowShift 5s ease infinite;
-  color: white;
-  font-weight: 600;
-  padding: 14px 24px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  z-index: 999;
-  transition: all 0.4s ease;
+/* ===== Fii AI — Professional UI ===== */
+
+/* button (kept rainbow as requested) */
+.fii-ai-btn{
+  position:fixed;bottom:25px;right:30px;
+  background:linear-gradient(45deg,#ff0055,#ffae00,#00c6ff,#a800ff);
+  background-size:300% 300%;animation:rainbowShift 6s ease infinite;
+  color:#fff;font-weight:600;padding:12px 22px;border:none;border-radius:22px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.20);cursor:pointer;z-index:1200;transition:all .3s;
 }
+@keyframes rainbowShift{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
+.fii-ai-btn.scrolled{width:56px;height:56px;padding:0;border-radius:50%;font-size:15px;display:flex;align-items:center;justify-content:center;right:70px}
 
-@keyframes rainbowShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* chatbox container */
+.fii-ai-chatbox{
+  position:fixed;bottom:98px;right:50px;width:400px;height:540px;
+  background:#fff;border-radius:14px;box-shadow:0 18px 40px rgba(15,23,42,0.18);
+  display:none;flex-direction:column;overflow:hidden;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+  z-index:1250;max-width:92vw;
 }
+.ailogo{max-width: 70px;margin-left: 15px;}
 
-/* When scrolled — becomes a circle */
-.fii-ai-btn.scrolled {
-  width: 55px;
-  height: 55px;
-  padding: 0;
-  border-radius: 50%;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  right: 60px; /* Keeps space from move-to-top button */
+/* header */
+.fii-ai-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:linear-gradient(90deg,#00c6ff,#0072ff);color:#fff}
+.fi-left{display:flex;align-items:center;gap:10px}
+.fi-title{margin:0;font-size:1.05rem;font-weight:700}
+.mini-btn{background:rgba(255,255,255,0.12);border:none;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+.mini-btn:hover{background:rgba(255,255,255,0.22)}
+.close-ai{background:none;border:none;color:#fff;font-size:22px;cursor:pointer}
+
+/* body (messages) */
+.fii-ai-body{flex:1;padding:14px;overflow:auto;display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,#fbfdff,#fff)}
+.ai-bubble{max-width:78%;padding:10px 14px;border-radius:12px;line-height:1.45;box-shadow:0 1px 0 rgba(0,0,0,0.03)}
+.ai-msg{background:#f1f7ff;align-self:flex-start;color:#0b3570}
+.user-msg{background:#e6ffe9;align-self:flex-end;color:#123e18;text-align:right}
+
+/* footer (input area) */
+.fii-ai-footer{display:flex;gap:8px;align-items:flex-end;padding:10px 12px;border-top:1px solid #eef3f8;background:#fff}
+.add-btn{background:none;border:1px dashed #cfd8e3;padding:6px 8px;border-radius:8px;cursor:pointer}
+#userInput{flex:1;min-height:36px;max-height:140px;padding:8px 10px;border-radius:8px;border:1px solid #e6eef7;resize:none;font-size:0.98rem;outline:none}
+.send-btn{background:linear-gradient(90deg,#0072ff,#00c6ff);color:#fff;border:none;padding:10px 12px;border-radius:10px;cursor:pointer}
+
+/* typing indicator small */
+.typing{font-style:italic;color:#666;font-size:0.95rem;padding:6px 8px;background:#fff;border-radius:8px;align-self:flex-start}
+
+/* history overlay & panel */
+#historyOverlay{position:fixed;inset:0;background:none;display:none;z-index:1230}
+.fii-history-panel{position:absolute;top:0;left:-320px;width:320px;height:100%;background:#fff;box-shadow:6px 0 30px rgba(15,23,42,0.12);transition:transform .36s cubic-bezier(.2,.9,.3,1);transform:translateX(0);z-index:1260;display:flex;flex-direction:column}
+.fii-history-panel.open{transform:translateX(320px)} /* we slide it into view by translating right */
+.history-header{padding:12px 14px;border-bottom:1px solid #f2f6fb;background:linear-gradient(90deg,#00c6ff,#0072ff);color:#fff;display:flex;align-items:center;justify-content:space-between}
+.history-list{overflow:auto;padding:8px 6px;display:flex;flex-direction:column;gap:6px}
+.history-item{padding:10px;border-radius:8px;background:#fbfcff;border:1px solid #f1f5fb;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.history-item .meta{font-size:0.8rem;color:#6b7280}
+.history-item:hover{background:#f3f0ff}
+.history-btn{border-radius: 60px;}
+
+/* small screens */
+@media (max-width:640px){
+  .fii-ai-chatbox{right:12px;bottom:80px;width:92vw;height:78vh}
+  .fii-ai-btn{right:18px;bottom:18px}
+  .fii-history-panel{width:88vw}
+  .fii-history-panel.open{transform:translateX(88vw)}
 }
-
-/* Chat Window */
-.fii-ai-chatbox {
-  position: fixed;
-  bottom: 100px;
-  right: 50px;
-  width: 380px;
-  height: 500px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.fii-ai-header {
-  background: linear-gradient(45deg, #00c6ff, #0072ff);
-  color: #fff;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.fii-ai-body {
-  flex: 1;
-  padding: 12px;
-  overflow-y: auto;
-  font-size: 0.95rem;
-}
-
-.fii-ai-body .ai-message,
-.fii-ai-body .user-message {
-  margin: 8px 0;
-  padding: 10px 14px;
-  border-radius: 12px;
-  max-width: 80%;
-  line-height: 1.4;
-}
-
-.fii-ai-body .ai-message {
-  background: #f0f4ff;
-  align-self: flex-start;
-}
-
-.fii-ai-body .user-message {
-  background: #daf5e0;
-  align-self: flex-end;
-}
-
-.fii-ai-footer {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  border-top: 1px solid #eee;
-  background: #fafafa;
-}
-
-.fii-ai-footer input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 8px 12px;
-  font-size: 1rem;
-}
-
-.add-btn, .send-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #333;
-  transition: 0.3s;
-}
-
-.add-btn:hover, .send-btn:hover { color: #0072ff; }
-
-.close-ai {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-/* History button inside chat header */
-.history-btn {
-  background: rgba(255,255,255,0.12);
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-.history-btn:hover { background: rgba(255,255,255,0.2); }
-
-
-
-
-
-
-
 

@@ -240,31 +240,50 @@
   </footer>
 
   <button class="scroll-top" id="scrollTop">↑</button>
-<!-- ======== Fii AI Assistant Button & Chat Window ======== -->
-<div class="fii-ai-btn" id="fiiAiBtn">Fii AI</div>
+<!-- ===== Fii AI Assistant (professional) ===== -->
+<div class="fii-ai-btn" id="fiiAiBtn" aria-label="Open Fii AI">Fii AI</div>
 
-<div class="fii-ai-chatbox" id="fiiAiChat">
+<div class="fii-ai-chatbox" id="fiiAiChat" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="fii-ai-header">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button id="openHistory" class="history-btn" title="History">History</button>
-      <h2 style="margin:0">🤖 Fii AI</h2>
+    <div class="fi-left">
+      <button id="openHistory" class="history-btn" title="History" aria-label="Open history">🎯</button>
+      <h2 class="fi-title"><img src="icon/fii.jpeg" alt="fit-ill" class="ailogo"></h2>
     </div>
-    <button class="close-ai" id="closeFiiAi">&times;</button>
+    <div class="fi-right">
+      <button id="clearSession" class="mini-btn" title="Start New">New</button>
+      <button class="close-ai" id="closeFiiAi" aria-label="Close Fii AI">&times;</button>
+    </div>
   </div>
-  <div class="fii-ai-body" id="fiiChatBody">
-    <div class="ai-message">Hi 👋 I'm Fii AI! How can I help you today?</div>
+
+  <div class="fii-ai-body" id="fiiChatBody" tabindex="0" aria-live="polite">
+    <!-- messages will be injected here -->
   </div>
 
   <div class="fii-ai-footer">
-    <button class="add-btn">+</button>
-    <input type="text" id="userInput" placeholder="Type your message..." />
-    <button class="send-btn" id="sendMsg">➤</button>
+    <button class="add-btn" id="addBtn" title="Add">+</button>
+    <textarea id="userInput" placeholder="Type your message..." rows="1" aria-label="Type message"></textarea>
+    <button class="send-btn" id="sendMsg" aria-label="Send message">➤</button>
   </div>
+
+  <!-- History sidebar (hidden by default) -->
+  <aside class="fii-history-panel" id="fiiHistoryPanel" aria-hidden="true">
+    <div class="history-header">
+      <h4>Chat History</h4>
+      <button id="closeHistoryBtn" class="mini-btn" title="Close history">✕</button>
+    </div>
+    <div class="history-list" id="historyList" role="list"></div>
+  </aside>
+</div>
+
+<!-- overlay when history open -->
+<div id="historyOverlay" aria-hidden="true"></div>
+  
 </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 

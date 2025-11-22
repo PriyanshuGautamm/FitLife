@@ -623,7 +623,7 @@ header {
     .btn-suubscribe:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(10,30,60,0.12)}
 
     .btn-phost{background-color:rgb(239, 234, 234);
-      color:rgb(0, 0, 0);
+      color:rgb(195, 38, 38);
       padding:8px 14px;border-radius:12px;width: 180px;margin-left: 30px;margin-top: 15px;flex-direction: column; border:none;cursor:pointer;font-weight:700;box-shadow:0 6px 18px rgba(10,30,60,0.08);transition:transform 150ms ease, box-shadow 150ms ease;
     }
     .btn-phost:hover{background:linear-gradient(90deg, rgba(11,111,176,0.06), rgba(11,111,176,0.02));transform:translateY(-2px)}
@@ -978,6 +978,7 @@ header {
   font-size: 0.85rem;
 }
 .history-btn:hover { background: rgba(255,255,255,0.2); }
+
 
 
 

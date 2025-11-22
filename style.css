@@ -539,6 +539,19 @@ header {
     display: flex;
   }
 }
+@media (max-width: 800px) {
+  .nav-links {
+    display: flex;
+    gap: 15px;
+  }
+
+  /* Hide unnecessary links on phone */
+  .nav-links li:nth-child(2), /* Calculator */
+  .nav-links li:nth-child(3)  /* About */
+  {
+    display: none;
+  }
+}
 
 .scroll-top {
       position: fixed;
@@ -732,6 +745,7 @@ header {
   font-size: 0.85rem;
 }
 .history-btn:hover { background: rgba(255,255,255,0.2); }
+
 
 
 

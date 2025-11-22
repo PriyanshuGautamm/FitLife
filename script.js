@@ -147,6 +147,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+// Dark mode toggle
+    const darkToggle = document.getElementById('darkToggle');
+    function applyTheme(theme){
+      if(theme === 'dark'){ document.documentElement.setAttribute('data-theme','dark'); darkToggle.textContent='☀️ Light'; darkToggle.setAttribute('aria-pressed','true'); }
+      else{ document.documentElement.removeAttribute('data-theme'); darkToggle.textContent='🌙 Dark'; darkToggle.setAttribute('aria-pressed','false'); }
+    }
+    const savedTheme = localStorage.getItem('fitlife-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    applyTheme(savedTheme);
+    darkToggle.addEventListener('click',()=>{ const next = document.documentElement.hasAttribute('data-theme') ? 'light' : 'dark'; applyTheme(next); localStorage.setItem('fitlife-theme', next); });
 
 
    // ===== Fii AI Assistant Logic (replace old code block) =====
@@ -313,4 +322,5 @@ userInput.addEventListener("keydown", (e) => {
 
 // initial render
 renderChatBody();
+
 

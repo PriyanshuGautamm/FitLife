@@ -878,13 +878,6 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
     gap: 15px;
   }
 
-  /* Hide unnecessary links on phone */
-  .nav-links li:nth-child(2), /* Calculator */
-  .nav-links li:nth-child(3)  /* About */
-  {
-    display: none;
-  }
-}
 @media (max-width: 800px) {
 
   /* Nav links visible on phone */
@@ -1400,6 +1393,7 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   .fii-history-panel{width:88vw}
   .fii-history-panel.open{transform:translateX(88vw)}
 }
+
 
 
 

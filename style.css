@@ -879,8 +879,10 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   }
 
   /* Hide unnecessary links on phone */
-  .nav-links li:nth-child(2), /* Calculator */
-  .nav-links li:nth-child(3)  /* About */
+  .nav-links li:nth-child(2), /* Home */
+  .nav-links li:nth-child(3)  /* Calculator */
+  .nav-links li:nth-child(4)  /* About */
+  .nav-links li:nth-child(5)  /* contact */
   {
     display: none;
   }
@@ -913,8 +915,10 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   }
 
   /* Hide the unwanted links */
-  .nav-links li:nth-child(2), /* Calculator */
-  .nav-links li:nth-child(3)  /* About */
+  .nav-links li:nth-child(2), /* Home */
+  .nav-links li:nth-child(3)  /* Calculator */
+  .nav-links li:nth-child(4)  /* About */
+  .nav-links li:nth-child(5)  /* contact */
   {
     display: none;
   }
@@ -1392,6 +1396,7 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   .fii-history-panel{width:88vw}
   .fii-history-panel.open{transform:translateX(88vw)}
 }
+
 
 
 

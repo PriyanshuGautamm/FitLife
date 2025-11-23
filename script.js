@@ -341,3 +341,170 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+//--------------------------------------
+// LOGIN / SIGNUP / PROFILE LOGIC
+//--------------------------------------
+
+const authModal = document.getElementById("authModal");
+const loginSection = document.getElementById("loginSection");
+const signupSection = document.getElementById("signupSection");
+
+const navLoginBtn = document.getElementById("navLoginBtn");
+const sidebarLoginOption = document.getElementById("sidebarLoginOption");
+const profileBtnSidebar = document.getElementById("profileBtn");
+
+const closeAuth = document.getElementById("closeAuth");
+
+// OPEN LOGIN MODAL
+function openLoginModal() {
+  loginSection.classList.remove("hidden");
+  signupSection.classList.add("hidden");
+  clearAuthInputs();
+  authModal.classList.remove("hidden");
+}
+
+navLoginBtn.onclick = openLoginModal;
+sidebarLoginOption.onclick = openLoginModal;
+
+// OPEN SIGNUP
+document.getElementById("openSignup").onclick = function() {
+  signupSection.classList.remove("hidden");
+  loginSection.classList.add("hidden");
+  clearAuthInputs();
+};
+
+// BACK TO LOGIN
+document.getElementById("openLogin").onclick = function() {
+  openLoginModal();
+};
+
+// CLOSE MODAL
+closeAuth.onclick = () => authModal.classList.add("hidden");
+
+// CLEAR INPUTS
+function clearAuthInputs() {
+  document.querySelectorAll("#authModal input").forEach(i => i.value = "");
+}
+
+// SIGNUP NOW
+document.getElementById("signupBtnNow").onclick = function() {
+  const user = {
+    name: signupName.value,
+    email: signupEmail.value,
+    password: signupPassword.value
+  };
+
+  localStorage.setItem("fitUser", JSON.stringify(user));
+  authModal.classList.add("hidden");
+  updateLoginState();
+};
+
+// LOGIN NOW
+document.getElementById("loginBtnNow").onclick = function() {
+  const saved = JSON.parse(localStorage.getItem("fitUser"));
+
+  if (!saved || saved.email !== loginEmail.value || saved.password !== loginPassword.value) {
+    alert("Incorrect email or password.");
+    return;
+  }
+
+  authModal.classList.add("hidden");
+  updateLoginState();
+};
+
+// UPDATE UI BASED ON LOGIN STATE
+function updateLoginState() {
+  const user = JSON.parse(localStorage.getItem("fitUser"));
+
+  // Navbar
+  navLoginBtn.textContent = user ? "My Profile" : "Login";
+
+  // Sidebar
+  sidebarLoginOption.classList.toggle("hidden", !!user);
+}
+
+// Sidebar Profile Click
+profileBtnSidebar.onclick = function() {
+  const user = JSON.parse(localStorage.getItem("fitUser"));
+  if (!user) openLoginModal();
+  else alert("Profile page coming soon!");
+};
+
+updateLoginState();
+
+// ===============================
+// PROFILE PAGE FULL LOGIC
+// ===============================
+
+// Elements
+const profileModal = document.getElementById("profileModal");
+const closeProfile = document.getElementById("closeProfile");
+const logoutUser = document.getElementById("logoutUser");
+
+const saveProfileBtn = document.getElementById("saveProfileBtn");
+const uploadPic = document.getElementById("uploadPic");
+const profilePic = document.getElementById("profilePic");
+
+// OPEN PROFILE
+function openProfileModal() {
+  const u = JSON.parse(localStorage.getItem("fitUser"));
+  if (!u) return openLoginModal();
+
+  // put details in inputs
+  pNameInput.value = u.name || "";
+  pEmailInput.value = u.email || "";
+  pMobileInput.value = u.mobile || "";
+  pAgeInput.value = u.age || "";
+  pHeightInput.value = u.height || "";
+  pWeightInput.value = u.weight || "";
+  profilePic.src = u.pic || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+
+  profileModal.classList.remove("hidden");
+}
+
+// CLOSE
+closeProfile.onclick = () => profileModal.classList.add("hidden");
+
+// LOGOUT
+logoutUser.onclick = () => {
+  localStorage.removeItem("fitUser");
+  profileModal.classList.add("hidden");
+  updateLoginState();
+};
+
+// SAVE PROFILE
+saveProfileBtn.onclick = () => {
+  let u = JSON.parse(localStorage.getItem("fitUser")) || {};
+
+  u.name = pNameInput.value;
+  u.email = pEmailInput.value;
+  u.mobile = pMobileInput.value;
+  u.age = pAgeInput.value;
+  u.height = pHeightInput.value;
+  u.weight = pWeightInput.value;
+
+  localStorage.setItem("fitUser", JSON.stringify(u));
+  alert("Profile Updated Successfully!");
+};
+
+// CHANGE PROFILE PIC
+uploadPic.onchange = function () {
+  const file = this.files[0];
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    profilePic.src = reader.result;
+
+    let u = JSON.parse(localStorage.getItem("fitUser")) || {};
+    u.pic = reader.result;
+    localStorage.setItem("fitUser", JSON.stringify(u));
+  };
+
+  reader.readAsDataURL(file);
+};
+document.getElementById("profileBtn").onclick = openProfileModal;
+
+document.getElementById("navLoginBtn").onclick = function () {
+  const u = JSON.parse(localStorage.getItem("fitUser"));
+  u ? openProfileModal() : openLoginModal();
+};

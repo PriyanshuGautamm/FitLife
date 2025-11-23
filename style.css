@@ -948,3 +948,60 @@ header {
   word-wrap: break-word !important;
 }
 
+/* ===== Fii AI — Mobile responsiveness tweaks (no visual relocation of button) ===== */
+@media (max-width: 640px) {
+  /* keep same right/bottom for the open button (no change) */
+  .fii-ai-btn {
+    /* keep as-is; small adjustments only for touch comfort */
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* chatbox: keep position fixed but make it mobile-friendly */
+  .fii-ai-chatbox {
+    position: fixed;           /* unchanged */
+    right: 12px;               /* small margin from right */
+    bottom: 80px;              /* default bottom, will be adjusted by JS when keyboard opens */
+    width: 92vw;               /* mobile-friendly width */
+    max-width: 420px;          /* don't grow too wide on big phones */
+    height: auto;
+    max-height: calc(100vh - 140px); /* leave room for status/nav bars and button */
+    border-radius: 12px;
+    box-sizing: border-box;
+    overflow: hidden;          /* keep internal scroll inside .fii-ai-body */
+  }
+
+  /* body/messages area must be scrollable but limited so footer/input always visible */
+  .fii-ai-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 220px); /* header + footer space */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* chat footer (input area) should stay visible and not collapse */
+  .fii-ai-footer {
+    flex-shrink: 0;
+    padding: 8px 10px;
+    box-shadow: 0 -4px 18px rgba(0,0,0,0.12);
+  }
+
+  /* input should expand and wrap correctly */
+  #userInput {
+    width: 100%;
+    min-height: 40px;
+    max-height: 140px;
+    resize: none;
+    overflow: auto;
+  }
+
+  /* message bubble limits to avoid overflow off-screen */
+  .ai-bubble, .user-msg {
+    max-width: 86%;
+    word-break: break-word;
+  }
+}
+
+/* small-touch devices: make send button easy to press */
+@media (hover: none) and (pointer: coarse) {
+  .send-btn { padding: 10px 12px; }
+}

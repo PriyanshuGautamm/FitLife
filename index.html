@@ -21,6 +21,7 @@
 
     <!-- Normal Nav Links (for desktop) -->
     <ul class="nav-links">
+      <li><a href="#" id="navLoginBtn">Login</a></li>
       <li><a href="#home">Home</a></li>
       <li><a href="#calculator">Calculator</a></li>
       <li><a href="#about">About</a></li>
@@ -31,6 +32,7 @@
 
   <!-- Slide Side Menu -->
   <div class="side-menu" id="sideMenu">
+    <a href="#" id="sidebarLoginOption">➡️Login</a>
     <a href="#home">🏠 Home</a>
     <a href="#calculator">📟 BMI Calculator</a>
     <a href="#heartSection">🫀 Your Heart</a>
@@ -279,10 +281,88 @@
 <div id="historyOverlay" aria-hidden="true"></div>
   
 </div>
+<!-- AUTH MODAL -->
+<div id="authModal" class="modal hidden">
+  <div class="auth-box">
+    <span id="closeAuth" class="close-auth">&times;</span>
 
+    <!-- LOGIN SECTION -->
+    <div id="loginSection">
+      <h2 class="auth-title">Login to FitLife</h2>
+
+      <input type="text" id="loginEmail" placeholder="Email or Mobile Number">
+      <input type="password" id="loginPassword" placeholder="Password">
+
+      <button class="google-btn">Continue with Google</button>
+
+      <button id="loginBtnNow" class="auth-btn">Login</button>
+
+      <p class="forgot-link">Forgot Password?</p>
+
+      <p class="switch-text">New to FitLife? <span id="openSignup" class="auth-link">Create an account</span></p>
+    </div>
+
+    <!-- SIGNUP SECTION -->
+    <div id="signupSection" class="hidden">
+      <h2 class="auth-title">Create your FitLife Account</h2>
+
+      <input type="text" id="signupName" placeholder="Full Name">
+      <input type="text" id="signupEmail" placeholder="Email or Mobile Number">
+      <input type="password" id="signupPassword" placeholder="Create Password">
+
+      <button id="signupBtnNow" class="auth-btn">Create Account</button>
+
+      <p class="switch-text">Already have an account? <span id="openLogin" class="auth-link">Login</span></p>
+    </div>
+  </div>
+</div>
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal hidden">
+  <div class="profile-box">
+    <!-- Logout (Top Right) -->
+    <button id="logoutUser" class="logout-top-btn" aria-label="Logout">Logout</button>
+
+    <!-- Close (X) -->
+    <button id="closeProfile" class="close-profile" aria-label="Close profile">&times;</button>
+
+    <!-- Profile Picture + Edit -->
+    <div class="profile-pic-container">
+      <img id="profilePic" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="profile-pic" alt="Profile picture">
+      <label for="uploadPic" class="edit-pic-btn">Edit</label>
+      <input type="file" id="uploadPic" accept="image/*" class="hidden">
+    </div>
+
+    <h3 class="profile-title">Personal Details</h3>
+
+    <div class="profile-details">
+      <label for="pNameInput">Full name</label>
+      <input id="pNameInput" class="full" type="text" placeholder="Your full name">
+
+      <label for="pEmailInput">Email</label>
+      <input id="pEmailInput" class="full" type="email" placeholder="name@example.com">
+
+      <label for="pMobileInput">Mobile</label>
+      <input id="pMobileInput" class="full" type="tel" placeholder="+91">
+
+      <label for="pAgeInput">Age</label>
+      <input id="pAgeInput" type="number" min="0" placeholder="Age">
+
+      <label for="pHeightInput">Height (cm)</label>
+      <input id="pHeightInput" type="number" min="0" placeholder="Height in cm">
+
+      <label for="pWeightInput">Weight (kg)</label>
+      <input id="pWeightInput" type="number" min="0" placeholder="Weight in kg">
+
+      <p class="profile-help">Update your personal details here. These values will be used to improve recommendations.</p>
+
+      <button id="saveProfileBtn" class="save-profile-btn">Save Changes</button>
+    </div>
+  </div>
+</div>
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 

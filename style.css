@@ -912,29 +912,37 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
     align-items: center;
   }
 
-  /* Hide the unwanted links */
-  .nav-links li:nth-child(2), /* Calculator */
-  .nav-links li:nth-child(3)  /* About */
-  {
-    display: none;
+  @media (max-width: 800px) {
+
+  .nav-links li {
+    display: none !important;
   }
 
-}
+  /* Show Login */
+  .nav-links li:nth-child(1) {
+    display: flex !important;
+  }
 
-.scroll-top {
-      position: fixed;
-      bottom: 20px;
-      right: 25px;
-      background: var(--green);
-      color: white;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      transition: 0.3s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
+  /* Show Subscribe */
+  .nav-links li:nth-child(6) {
+    display: flex !important;
+  }
+
+  /* Fix layout */
+  .nav-links {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .navbar {
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
 
     .scroll-top.show {
       display: block;
@@ -1392,6 +1400,7 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   .fii-history-panel{width:88vw}
   .fii-history-panel.open{transform:translateX(88vw)}
 }
+
 
 
 

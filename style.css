@@ -920,6 +920,21 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   }
 }
 
+
+.scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 25px;
+      background: var(--green);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      transition: 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
     .scroll-top.show {
       display: block;
     }
@@ -1376,6 +1391,7 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   .fii-history-panel{width:88vw}
   .fii-history-panel.open{transform:translateX(88vw)}
 }
+
 
 
 

@@ -339,4 +339,97 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // small helper: if sessions exist and you want to auto-load last, you can... (we don't auto-load per spec)
 });
+// edit
+// ===== Fii AI — Mobile keyboard / viewport adapt (paste at end of script.js) =====
+(function(){
+  const chatbox = document.querySelector('.fii-ai-chatbox');
+  const chatBody = document.getElementById('fiiChatBody'); // .fii-ai-body
+  const userInput = document.getElementById('userInput');
+
+  if (!chatbox || !userInput || !chatBody) return; // safety
+
+  // remember original bottom (use computed value)
+  const computed = window.getComputedStyle(chatbox);
+  const originalBottom = parseInt(computed.bottom, 10) || 98;
+
+  // helper: set bottom safely
+  function setChatBottom(px) {
+    // ensure px is number
+    chatbox.style.bottom = px + 'px';
+  }
+
+  // VisualViewport approach (best for modern mobile browsers)
+  if (window.visualViewport) {
+    let lastViewportHeight = window.visualViewport.height;
+
+    function onViewportResize() {
+      const vv = window.visualViewport;
+      const vh = vv.height;
+      const delta = window.innerHeight - vh; // approximate keyboard height (px)
+      // If delta is significant (keyboard likely open), raise the chatbox
+      if (delta > 120) {
+        // add small padding so input not flush to keyboard
+        setChatBottom(delta + 12);
+        // also reduce chatBody max-height so scrolling works
+        chatBody.style.maxHeight = (vh - 140) + 'px';
+      } else {
+        // keyboard likely closed
+        setChatBottom(originalBottom);
+        chatBody.style.maxHeight = '';
+      }
+      lastViewportHeight = vh;
+    }
+
+    window.visualViewport.addEventListener('resize', onViewportResize, { passive: true });
+    window.visualViewport.addEventListener('scroll', onViewportResize, { passive: true });
+
+    // also when input gains focus (some browsers don't fire resize reliably)
+    userInput.addEventListener('focus', () => {
+      // small timeout to allow keyboard to open
+      setTimeout(onViewportResize, 50);
+    });
+    userInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        setChatBottom(originalBottom);
+        chatBody.style.maxHeight = '';
+      }, 120);
+    });
+  }
+  else {
+    // Fallback: listen to window resize + focus events
+    function fallbackResize() {
+      const delta = window.innerHeight - document.documentElement.clientHeight;
+      if (Math.abs(delta) > 120) {
+        setChatBottom(Math.abs(delta) + 12);
+        chatBody.style.maxHeight = (window.innerHeight - 140) + 'px';
+      } else {
+        setChatBottom(originalBottom);
+        chatBody.style.maxHeight = '';
+      }
+    }
+
+    window.addEventListener('resize', () => setTimeout(fallbackResize, 50), { passive: true });
+    userInput.addEventListener('focus', () => setTimeout(fallbackResize, 120));
+    userInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        setChatBottom(originalBottom);
+        chatBody.style.maxHeight = '';
+      }, 120);
+    });
+  }
+
+  // Extra: when opening chat (Fii AI button), ensure scroll to bottom and focus behavior
+  const fiiBtn = document.getElementById('fiiAiBtn');
+  const closeBtn = document.getElementById('closeFiiAi');
+  if (fiiBtn) {
+    fiiBtn.addEventListener('click', () => {
+      // slight delay to let chat display; then scroll to bottom
+      setTimeout(() => {
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 220);
+    });
+  }
+  // when send or new message appended, ensure scroll to bottom
+  const origRender = null; // no override here; existing code already scrolls in renderMessages()
+})();
 

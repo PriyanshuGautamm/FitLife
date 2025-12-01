@@ -233,6 +233,15 @@ body{margin:0;color:var(--dark);background:#ffffff;line-height:1.5}
 
 .hero-illustration{max-width:300px;opacity:0.95;margin-right: 65px;}
 
+.theme-image {
+  content: url("icon/lady.jpeg");
+}
+
+/* When dark mode is active */
+[data-theme="dark"] .theme-image {
+  content: url("icon/lady-dark.jpeg");
+}
+
 /* ====== SHOW IMAGE ONLY ON LAPTOP/DESKTOP ====== */
 .desktop-only {
   display: block; /* by default visible */
@@ -1391,6 +1400,7 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
   .fii-history-panel{width:88vw}
   .fii-history-panel.open{transform:translateX(88vw)}
 }
+
 
 
 

@@ -1403,6 +1403,26 @@ html[data-theme="dark"] .auth-box * { color: inherit !important; }
 
 
 
+/* ==== MOBILE NAV FIX: Show ONLY Login + Subscribe ==== */
+@media (max-width: 800px) {
+
+  /* Show nav-links container */
+  .nav-links {
+    display: flex !important;
+    gap: 15px;
+    align-items: center;
+  }
+
+  /* Hide ALL links except Login(1st) + Subscribe(last) */
+  .nav-links li {
+    display: none !important;
+  }
+
+  .nav-links li:first-child,       /* Login */
+  .nav-links li:last-child {       /* Subscribe */
+    display: flex !important;
+  }
+}
 
 
 
